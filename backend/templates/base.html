@@ -2,22 +2,49 @@
 <html lang="pt-BR">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
 
     <title>{% block title %}OriginTech Amazônia{% endblock %}</title>
 
+    <!-- Bootstrap -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Nosso CSS -->
+
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/style.css') }}">
+
 </head>
 
 <body>
 
-<header>
+<nav class="navbar navbar-expand-lg navbar-dark"
+     style="background:#1B5E20;">
 
-    <h1>🌱 OriginTech Amazônia</h1>
+    <div class="container">
 
-</header>
+        <a class="navbar-brand fw-bold"
+           href="/">
+
+            🌱 OriginTech Amazônia
+
+        </a>
+
+        <button class="btn btn-outline-light">
+
+            Entrar
+
+        </button>
+
+    </div>
+
+</nav>
 
 <main>
 
@@ -27,6 +54,24 @@
 
 </main>
 
-</body>
+<footer class="bg-dark text-light mt-5">
 
-</html>
+    <div class="container py-4 text-center">
+
+        <h5>🌱 OriginTech Amazônia</h5>
+
+        <p class="mb-1">
+
+            Transformando a origem em valor.
+
+        </p>
+
+        <small>
+
+            © 2026 OriginTech Amazônia • Desenvolvido na Amazônia Brasileira 🇧🇷
+
+        </small>
+
+    </div>
+
+</footer>

@@ -63,3 +63,22 @@ header h1 {
 .btn-primary:hover {
     background: var(--primary);
 }
+
+.card {
+    border: none;
+    border-radius: 16px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0,0,0,.15);
+}
+
+.btn-success{
+    border-radius:10px;
+}
+
+.btn-outline-success{
+    border-radius:10px;
+}
