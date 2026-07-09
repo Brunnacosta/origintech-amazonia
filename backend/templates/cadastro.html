@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}
+Cadastro
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6">
+
+            <div class="card shadow">
+
+                <div class="card-body p-4">
+
+                    <h2 class="mb-4 text-center">
+                        Criar Conta
+                    </h2>
+
+                    <form method="POST">
+                       
+                        {{ form.hidden_tag() }}
+                    
+
+                        <div class="mb-3">
+
+                            {{ form.nome.label(class="form-label") }}
+                            {{ form.nome(class="form-control") }}
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            {{ form.email.label(class="form-label") }}
+                            {{ form.email(class="form-control") }}
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            {{ form.senha.label(class="form-label") }}
+                            {{ form.senha(class="form-control") }}
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            {{ form.tipo.label }}
+                            <br>
+
+                            {{ form.tipo }}
+
+                        </div>
+
+                        {{ form.submit(class="btn btn-success w-100") }}
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

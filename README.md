@@ -50,3 +50,17 @@ Digitalizar e integrar toda a cadeia do cacau, promovendo transparência, susten
 
 Desenvolvido na Amazônia Brasileira 🇧🇷intech-amazonia
 Building the digital infrastructure for the Amazon cocoa supply chain.
+
+
+## 🚀 Status do Projeto
+
+### Sprint 1 ✅
+- Fundação da plataforma
+- Estrutura inicial
+- Flask configurado
+- Primeira página funcionando
+
+### Sprint 2 🚧
+- Landing Page
+- Design System
+- Interface institucional
