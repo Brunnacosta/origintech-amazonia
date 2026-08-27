@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+
+        <h1 class="fw-bold">
+            Dashboard
+        </h1>
+
+        <p class="lead">
+            Bem-vindo à OriginTech Amazônia 🌱
+        </p>
+
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Meus Lotes -->
+        <div class="col-md-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body">
+
+                    <h4>🌱 Meus Lotes</h4>
+
+                    <p>
+                        Cadastre e acompanhe seus lotes de cacau.
+                    </p>
+
+                    <a
+                        href="{{ url_for('lotes.meus_lotes') }}"
+                        class="btn btn-success"
+                    >
+                        Acessar
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Inteligência -->
+        <div class="col-md-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body">
+
+                    <h4>📊 Inteligência</h4>
+
+                    <p>
+                        Consulte análises e informações da produção.
+                    </p>
+
+                    <button class="btn btn-success">
+                        Acessar
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Marketplace -->
+        <div class="col-md-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body">
+
+                    <h4>🛒 Marketplace</h4>
+
+                    <p>
+                        Encontre compradores e oportunidades.
+                    </p>
+
+                    <button class="btn btn-success">
+                        Acessar
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

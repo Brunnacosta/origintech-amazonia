@@ -37,4 +37,21 @@ class CadastroForm(FlaskForm):
         default="produtor"
     )
 
-    submit = SubmitField("Criar Conta")
+class LoginForm(FlaskForm):
+    email = StringField(
+        "E-mail",
+        validators=[
+            DataRequired(),
+            Email()
+
+        ]
+    )
+    senha = PasswordField(
+        "Senha",
+        validators=[
+            DataRequired()
+        ]
+    )   
+ 
+   
+    submit = SubmitField("Entrar")

@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}
+Meus Lotes
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h1>🌱 Meus Lotes</h1>
+
+            <p class="text-muted">
+                Acompanhe os lotes cadastrados por você.
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('lotes.novo_lote') }}"
+            class="btn btn-success"
+        >
+            + Cadastrar Lote
+        </a>
+
+    </div>
+
+    {% if lotes %}
+
+        <div class="card shadow">
+
+            <div class="card-body">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead>
+
+                            <tr>
+                                <th>Código</th>
+                                <th>Nome</th>
+                                <th>Colheita</th>
+                                <th>Quantidade</th>
+                                <th>Umidade</th>
+                                <th>Ações</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {% for lote in lotes %}
+
+                                <tr>
+
+                                    <td>
+                                        <strong>
+                                            {{ lote.codigo }}
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        {{ lote.nome }}
+                                    </td>
+
+                                    <td>
+                                        {{ lote.data_colheita.strftime("%d/%m/%Y") }}
+                                    </td>
+
+                                    <td>
+                                        {{ lote.quantidade_kg }} kg
+                                    </td>
+
+                                    <td>
+
+                                        {% if lote.umidade is not none %}
+
+                                            {{ lote.umidade }}%
+
+                                        {% else %}
+
+                                            —
+
+                                        {% endif %}
+
+                                    </td>
+
+                                    <td>
+
+                                        <a
+                                            href="{{ url_for('lotes.detalhes_lote', lote_id=lote.id) }}"
+                                            class="btn btn-sm btn-success"
+                                        >
+                                            👁 Ver detalhes
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% else %}
+
+        <div class="alert alert-info">
+
+            Você ainda não possui lotes cadastrados.
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
