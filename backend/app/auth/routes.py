@@ -55,6 +55,7 @@ def cadastro():
         form=form
     )
 
+
 @auth.route("/login", methods=["GET", "POST"])
 def login():
 
@@ -96,7 +97,9 @@ def login():
             "success"
         )
 
-        return redirect(url_for("main.index"))
+        return redirect(
+            url_for("auth.dashboard")
+        )
 
     return render_template(
         "login.html",
@@ -114,7 +117,9 @@ def logout():
         "success"
     )
 
-    return redirect(url_for("auth.login"))
+    return redirect(
+        url_for("auth.login")
+    )
 
 
 @auth.route("/dashboard")

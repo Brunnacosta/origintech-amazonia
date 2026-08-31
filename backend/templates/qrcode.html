@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}
+QR Code - {{ lote.codigo }}
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-7 col-lg-6">
+
+            <div class="card shadow">
+
+                <div class="card-body p-4 text-center">
+
+                    <!-- =====================================================
+                         CABEÇALHO
+                    ====================================================== -->
+
+                    <h1 class="fw-bold mb-2">
+                        🌱 OriginTech Amazônia
+                    </h1>
+
+                    <p class="text-muted">
+                        Identidade Digital do Lote
+                    </p>
+
+
+                    <hr>
+
+
+                    <!-- =====================================================
+                         INFORMAÇÕES DO LOTE
+                    ====================================================== -->
+
+                    <h3 class="mb-1">
+                        {{ lote.nome }}
+                    </h3>
+
+                    <p class="text-muted">
+                        {{ lote.codigo }}
+                    </p>
+
+
+                    <!-- =====================================================
+                         QR CODE
+                    ====================================================== -->
+
+                    <div class="my-4">
+
+                        <img
+                            src="{{ url_for(
+                                'lotes.imagem_qrcode',
+                                lote_id=lote.id
+                            ) }}"
+                            alt="QR Code do lote {{ lote.codigo }}"
+                            class="img-fluid"
+                            style="max-width: 300px;"
+                        >
+
+                    </div>
+
+
+                    <!-- =====================================================
+                         INSTRUÇÃO
+                    ====================================================== -->
+
+                    <p class="mb-4">
+                        📱 Aponte a câmera do celular para
+                        consultar a identidade digital deste lote.
+                    </p>
+
+
+                    <!-- =====================================================
+                         AÇÕES
+                    ====================================================== -->
+
+                    <div class="d-flex justify-content-center gap-2 flex-wrap">
+
+                        <a
+                            href="{{ url_for(
+                                'lotes.baixar_qrcode',
+                                lote_id=lote.id
+                            ) }}"
+                            class="btn btn-success"
+                        >
+                            ⬇️ Baixar QR Code
+                        </a>
+
+                        <a
+                            href="{{ url_for(
+                                'lotes.detalhes_lote',
+                                lote_id=lote.id
+                            ) }}"
+                            class="btn btn-outline-secondary"
+                        >
+                            ← Voltar
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

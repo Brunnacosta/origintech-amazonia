@@ -1,80 +1,133 @@
 {% extends "base.html" %}
 
 {% block title %}
-Meus Lotes
+Meus Lotes - OriginTech Amazônia
 {% endblock %}
 
 {% block content %}
 
-<div class="container py-5">
+<div class="container py-4 py-md-5">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <!-- =====================================================
+         CABEÇALHO
+    ====================================================== -->
 
-        <div>
-            <h1>🌱 Meus Lotes</h1>
+    <div class="row align-items-center mb-4">
 
-            <p class="text-muted">
-                Acompanhe os lotes cadastrados por você.
+        <div class="col-12 col-md">
+
+            <h1 class="fw-bold mb-1">
+                🌱 Meus Lotes
+            </h1>
+
+            <p class="text-muted mb-0">
+                Acompanhe e gerencie os lotes cadastrados por você.
             </p>
+
         </div>
 
-        <a
-            href="{{ url_for('lotes.novo_lote') }}"
-            class="btn btn-success"
-        >
-            + Cadastrar Lote
-        </a>
+
+        <div class="col-12 col-md-auto mt-3 mt-md-0">
+
+            <a
+                href="{{ url_for('lotes.novo_lote') }}"
+                class="btn btn-success px-4"
+            >
+                + Cadastrar novo lote
+            </a>
+
+        </div>
 
     </div>
 
+
+    <!-- =====================================================
+         LISTAGEM
+    ====================================================== -->
+
     {% if lotes %}
 
-        <div class="card shadow">
+        <div class="row g-4">
 
-            <div class="card-body">
+            {% for lote in lotes %}
 
-                <div class="table-responsive">
+                <div class="col-12 col-md-6 col-lg-4">
 
-                    <table class="table table-hover align-middle">
+                    <div class="card h-100 border-0 shadow-sm">
 
-                        <thead>
+                        <div class="card-body p-4">
 
-                            <tr>
-                                <th>Código</th>
-                                <th>Nome</th>
-                                <th>Colheita</th>
-                                <th>Quantidade</th>
-                                <th>Umidade</th>
-                                <th>Ações</th>
-                            </tr>
 
-                        </thead>
+                            <!-- CÓDIGO -->
 
-                        <tbody>
+                            <div class="d-flex justify-content-between align-items-start mb-3">
 
-                            {% for lote in lotes %}
+                                <div>
 
-                                <tr>
+                                    <div class="text-muted small">
+                                        Código do lote
+                                    </div>
 
-                                    <td>
-                                        <strong>
-                                            {{ lote.codigo }}
-                                        </strong>
-                                    </td>
+                                    <div class="fw-bold fs-5">
+                                        {{ lote.codigo }}
+                                    </div>
 
-                                    <td>
-                                        {{ lote.nome }}
-                                    </td>
+                                </div>
 
-                                    <td>
+
+                                <span class="badge bg-success">
+                                    ✓ Verificado
+                                </span>
+
+                            </div>
+
+
+                            <!-- NOME -->
+
+                            <h5 class="fw-bold mb-3">
+                                {{ lote.nome }}
+                            </h5>
+
+
+                            <!-- INFORMAÇÕES -->
+
+                            <div class="row g-3 mb-4">
+
+                                <div class="col-6">
+
+                                    <div class="text-muted small">
+                                        📅 Colheita
+                                    </div>
+
+                                    <div class="fw-semibold">
+
                                         {{ lote.data_colheita.strftime("%d/%m/%Y") }}
-                                    </td>
 
-                                    <td>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-6">
+
+                                    <div class="text-muted small">
+                                        📦 Quantidade
+                                    </div>
+
+                                    <div class="fw-semibold">
                                         {{ lote.quantidade_kg }} kg
-                                    </td>
+                                    </div>
 
-                                    <td>
+                                </div>
+
+
+                                <div class="col-6">
+
+                                    <div class="text-muted small">
+                                        💧 Umidade
+                                    </div>
+
+                                    <div class="fw-semibold">
 
                                         {% if lote.umidade is not none %}
 
@@ -86,42 +139,158 @@ Meus Lotes
 
                                         {% endif %}
 
-                                    </td>
+                                    </div>
 
-                                    <td>
+                                </div>
+
+
+                                <div class="col-6">
+
+                                    <div class="text-muted small">
+                                        🌿 Produção
+                                    </div>
+
+                                    <div class="fw-semibold">
+
+                                        {% if lote.sistema_producao %}
+
+                                            {{ lote.sistema_producao }}
+
+                                        {% else %}
+
+                                            —
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <hr>
+
+
+                            <!-- AÇÕES -->
+
+                            <div class="d-grid gap-2">
+
+                                <a
+                                    href="{{ url_for(
+                                        'lotes.detalhes_lote',
+                                        lote_id=lote.id
+                                    ) }}"
+                                    class="btn btn-success"
+                                >
+                                    👁 Ver detalhes
+                                </a>
+
+
+                                <div class="row g-2">
+
+                                    <div class="col-6">
 
                                         <a
-                                            href="{{ url_for('lotes.detalhes_lote', lote_id=lote.id) }}"
-                                            class="btn btn-sm btn-success"
+                                            href="{{ url_for(
+                                                'lotes.qrcode_lote',
+                                                lote_id=lote.id
+                                            ) }}"
+                                            class="btn btn-outline-success w-100"
                                         >
-                                            👁 Ver detalhes
+                                            📱 QR Code
                                         </a>
 
-                                    </td>
+                                    </div>
 
-                                </tr>
 
-                            {% endfor %}
+                                    <div class="col-6">
 
-                        </tbody>
+                                        <a
+                                            href="{{ url_for(
+                                                'lotes.editar_lote',
+                                                lote_id=lote.id
+                                            ) }}"
+                                            class="btn btn-outline-secondary w-100"
+                                        >
+                                            ✏️ Editar
+                                        </a>
 
-                    </table>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
 
                 </div>
+
+            {% endfor %}
+
+        </div>
+
+
+    {% else %}
+
+        <!-- =====================================================
+             NENHUM LOTE
+        ====================================================== -->
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body text-center py-5">
+
+                <div
+                    class="mb-3"
+                    style="font-size: 3rem;"
+                >
+                    📦
+                </div>
+
+                <h4 class="fw-bold">
+                    Você ainda não possui lotes
+                </h4>
+
+                <p class="text-muted mb-4">
+                    Cadastre seu primeiro lote de cacau
+                    para começar a criar sua identidade digital.
+                </p>
+
+                <a
+                    href="{{ url_for('lotes.novo_lote') }}"
+                    class="btn btn-success px-4"
+                >
+                    + Cadastrar meu primeiro lote
+                </a>
 
             </div>
 
         </div>
 
-    {% else %}
-
-        <div class="alert alert-info">
-
-            Você ainda não possui lotes cadastrados.
-
-        </div>
-
     {% endif %}
+
+
+    <!-- =====================================================
+         RODAPÉ
+    ====================================================== -->
+
+    <div class="text-center mt-5">
+
+        <small class="text-muted">
+
+            🌱 OriginTech Amazônia
+
+            <br>
+
+            Tecnologia para origem, rastreabilidade
+            e valorização do cacau amazônico.
+
+        </small>
+
+    </div>
 
 </div>
 

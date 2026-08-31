@@ -1,9 +1,21 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, RadioField, SubmitField
-from wtforms.validators import DataRequired, Email, Length
+
+from wtforms import (
+    StringField,
+    PasswordField,
+    RadioField,
+    SubmitField
+)
+
+from wtforms.validators import (
+    DataRequired,
+    Email,
+    Length
+)
 
 
 class CadastroForm(FlaskForm):
+
     nome = StringField(
         "Nome",
         validators=[
@@ -37,21 +49,24 @@ class CadastroForm(FlaskForm):
         default="produtor"
     )
 
+    submit = SubmitField("Criar Conta")
+
+
 class LoginForm(FlaskForm):
+
     email = StringField(
         "E-mail",
         validators=[
             DataRequired(),
             Email()
-
         ]
     )
+
     senha = PasswordField(
         "Senha",
         validators=[
             DataRequired()
         ]
-    )   
- 
-   
+    )
+
     submit = SubmitField("Entrar")

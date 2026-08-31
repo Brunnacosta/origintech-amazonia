@@ -128,7 +128,7 @@ Detalhes do Lote
 
                     <hr>
 
-                    <div class="d-flex gap-2">
+                    <div class="d-flex gap-2 flex-wrap">
 
                         <a
                             href="{{ url_for('lotes.meus_lotes') }}"
@@ -142,6 +142,13 @@ Detalhes do Lote
                             class="btn btn-success"
                         >
                             ✏️ Editar lote
+                        </a>
+
+                        <a
+                            href="{{ url_for('lotes.qrcode_lote', lote_id=lote.id) }}"
+                            class="btn btn-dark"
+                        >
+                            📱 QR Code
                         </a>
 
                         <form

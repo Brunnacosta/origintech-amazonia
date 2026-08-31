@@ -1,4 +1,17 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
+import io
+
+import qrcode
+
+from flask import (
+    Blueprint,
+    render_template,
+    redirect,
+    url_for,
+    flash,
+    current_app,
+    send_file
+)
+
 from flask_login import login_required, current_user
 
 from app.extensions import db
@@ -8,6 +21,10 @@ from app.lotes.forms import LoteForm
 
 lotes = Blueprint("lotes", __name__)
 
+
+# ============================================================
+# MEUS LOTES
+# ============================================================
 
 @lotes.route("/lotes")
 @login_required
@@ -21,6 +38,11 @@ def meus_lotes():
         "meus_lotes.html",
         lotes=lotes_usuario
     )
+
+
+# ============================================================
+# CADASTRAR LOTE
+# ============================================================
 
 @lotes.route("/lotes/novo", methods=["GET", "POST"])
 @login_required
@@ -50,12 +72,19 @@ def novo_lote():
             "success"
         )
 
-        return redirect(url_for("lotes.novo_lote"))
+        return redirect(
+            url_for("lotes.meus_lotes")
+        )
 
     return render_template(
         "lote_form.html",
         form=form
     )
+
+
+# ============================================================
+# DETALHES DO LOTE
+# ============================================================
 
 @lotes.route("/lotes/<int:lote_id>")
 @login_required
@@ -71,7 +100,15 @@ def detalhes_lote(lote_id):
         lote=lote
     )
 
-@lotes.route("/lotes/<int:lote_id>/editar", methods=["GET", "POST"])
+
+# ============================================================
+# EDITAR LOTE
+# ============================================================
+
+@lotes.route(
+    "/lotes/<int:lote_id>/editar",
+    methods=["GET", "POST"]
+)
 @login_required
 def editar_lote(lote_id):
 
@@ -112,7 +149,15 @@ def editar_lote(lote_id):
         form=form
     )
 
-@lotes.route("/lotes/<int:lote_id>/excluir", methods=["POST"])
+
+# ============================================================
+# EXCLUIR LOTE
+# ============================================================
+
+@lotes.route(
+    "/lotes/<int:lote_id>/excluir",
+    methods=["POST"]
+)
 @login_required
 def excluir_lote(lote_id):
 
@@ -129,4 +174,114 @@ def excluir_lote(lote_id):
         "success"
     )
 
-    return redirect(url_for("lotes.meus_lotes"))
+    return redirect(
+        url_for("lotes.meus_lotes")
+    )
+
+
+# ============================================================
+# TELA DO QR CODE
+# ============================================================
+
+@lotes.route("/lotes/<int:lote_id>/qrcode")
+@login_required
+def qrcode_lote(lote_id):
+
+    lote = Lote.query.filter_by(
+        id=lote_id,
+        produtor_id=current_user.id
+    ).first_or_404()
+
+    return render_template(
+        "qrcode.html",
+        lote=lote
+    )
+
+
+# ============================================================
+# IMAGEM DO QR CODE
+# ============================================================
+
+@lotes.route("/lotes/<int:lote_id>/qrcode/imagem")
+@login_required
+def imagem_qrcode(lote_id):
+
+    lote = Lote.query.filter_by(
+        id=lote_id,
+        produtor_id=current_user.id
+    ).first_or_404()
+
+    url_publica = (
+        f"{current_app.config['BASE_URL']}"
+        f"{url_for('lotes.lote_publico', codigo=lote.codigo)}"
+    )
+
+    imagem = qrcode.make(url_publica)
+
+    arquivo = io.BytesIO()
+
+    imagem.save(
+        arquivo,
+        format="PNG"
+    )
+
+    arquivo.seek(0)
+
+    return send_file(
+        arquivo,
+        mimetype="image/png"
+    )
+
+
+# ============================================================
+# BAIXAR QR CODE
+# ============================================================
+
+@lotes.route("/lotes/<int:lote_id>/qrcode/download")
+@login_required
+def baixar_qrcode(lote_id):
+
+    lote = Lote.query.filter_by(
+        id=lote_id,
+        produtor_id=current_user.id
+    ).first_or_404()
+
+    url_publica = (
+        f"{current_app.config['BASE_URL']}"
+        f"{url_for('lotes.lote_publico', codigo=lote.codigo)}"
+    )
+
+    imagem = qrcode.make(url_publica)
+
+    arquivo = io.BytesIO()
+
+    imagem.save(
+        arquivo,
+        format="PNG"
+    )
+
+    arquivo.seek(0)
+
+    return send_file(
+        arquivo,
+        mimetype="image/png",
+        as_attachment=True,
+        download_name=f"qrcode-{lote.codigo}.png"
+    )
+
+
+# ============================================================
+# PÁGINA PÚBLICA DO LOTE
+# ============================================================
+
+@lotes.route("/lote/<codigo>")
+def lote_publico(codigo):
+
+    lote = Lote.query.filter_by(
+        codigo=codigo
+    ).first_or_404()
+
+    return render_template(
+        "lote_publico.html",
+        lote=lote
+    )
