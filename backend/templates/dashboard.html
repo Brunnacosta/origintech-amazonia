@@ -1,12 +1,16 @@
 {% extends "base.html" %}
 
 {% block title %}
-Dashboard
+Dashboard - OriginTech Amazônia
 {% endblock %}
 
 {% block content %}
 
-<div class="container py-5">
+<div class="container py-4 py-md-5">
+
+    <!-- =====================================================
+         CABEÇALHO
+    ====================================================== -->
 
     <div class="text-center mb-5">
 
@@ -20,19 +24,33 @@ Dashboard
 
     </div>
 
-    <div class="row g-4">
 
-        <!-- Meus Lotes -->
-        <div class="col-md-4">
+    <!-- =====================================================
+         OPÇÕES DO PRODUTOR
+    ====================================================== -->
 
-            <div class="card shadow h-100">
+    <div class="row g-4 justify-content-center">
 
-                <div class="card-body">
 
-                    <h4>🌱 Meus Lotes</h4>
+        <!-- =================================================
+             MEUS LOTES
+        ================================================== -->
 
-                    <p>
-                        Cadastre e acompanhe seus lotes de cacau.
+        <div class="col-12 col-md-6 col-lg-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold">
+                        🌱 Meus Lotes
+                    </h4>
+
+                    <p class="text-muted">
+
+                        Cadastre e acompanhe
+                        seus lotes de cacau.
+
                     </p>
 
                     <a
@@ -49,20 +67,66 @@ Dashboard
         </div>
 
 
-        <!-- Inteligência -->
-        <div class="col-md-4">
+        <!-- =================================================
+             MINHA PROPRIEDADE
+        ================================================== -->
 
-            <div class="card shadow h-100">
+        <div class="col-12 col-md-6 col-lg-4">
 
-                <div class="card-body">
+            <div class="card shadow-sm border-0 h-100">
 
-                    <h4>📊 Inteligência</h4>
+                <div class="card-body p-4">
 
-                    <p>
-                        Consulte análises e informações da produção.
+                    <h4 class="fw-bold">
+                        🏡 Minha Propriedade
+                    </h4>
+
+                    <p class="text-muted">
+
+                        Consulte e atualize os dados
+                        da sua propriedade.
+
                     </p>
 
-                    <button class="btn btn-success">
+                    <a
+                        href="{{ url_for('auth.minha_propriedade') }}"
+                        class="btn btn-success"
+                    >
+                        Acessar
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             INTELIGÊNCIA
+        ================================================== -->
+
+        <div class="col-12 col-md-6 col-lg-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold">
+                        📊 Inteligência
+                    </h4>
+
+                    <p class="text-muted">
+
+                        Consulte análises e informações
+                        da produção.
+
+                    </p>
+
+                    <button
+                        class="btn btn-success"
+                        type="button"
+                    >
                         Acessar
                     </button>
 
@@ -73,20 +137,31 @@ Dashboard
         </div>
 
 
-        <!-- Marketplace -->
-        <div class="col-md-4">
+        <!-- =================================================
+             MARKETPLACE
+        ================================================== -->
 
-            <div class="card shadow h-100">
+        <div class="col-12 col-md-6 col-lg-4">
 
-                <div class="card-body">
+            <div class="card shadow-sm border-0 h-100">
 
-                    <h4>🛒 Marketplace</h4>
+                <div class="card-body p-4">
 
-                    <p>
-                        Encontre compradores e oportunidades.
+                    <h4 class="fw-bold">
+                        🛒 Marketplace
+                    </h4>
+
+                    <p class="text-muted">
+
+                        Encontre compradores
+                        e oportunidades.
+
                     </p>
 
-                    <button class="btn btn-success">
+                    <button
+                        class="btn btn-success"
+                        type="button"
+                    >
                         Acessar
                     </button>
 
@@ -95,6 +170,7 @@ Dashboard
             </div>
 
         </div>
+
 
     </div>
 

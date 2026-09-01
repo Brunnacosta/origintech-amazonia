@@ -3,13 +3,15 @@ from flask import (
     render_template,
     redirect,
     url_for,
-    flash
+    flash,
+    request
 )
 
 from flask_login import (
     login_user,
     logout_user,
-    login_required
+    login_required,
+    current_user
 )
 
 from app.auth.forms import CadastroForm, LoginForm
@@ -31,10 +33,7 @@ def cadastro():
 
     if form.validate_on_submit():
 
-        # --------------------------------------------------------
-        # Verifica se o e-mail já está cadastrado
-        # --------------------------------------------------------
-
+        # Verifica se o e-mail já existe
         usuario_existente = Usuario.query.filter_by(
             email=form.email.data
         ).first()
@@ -50,62 +49,39 @@ def cadastro():
                 url_for("auth.cadastro")
             )
 
-
-        # --------------------------------------------------------
         # Cria o hash da senha
-        # --------------------------------------------------------
-
         senha_hash = bcrypt.generate_password_hash(
             form.senha.data
         ).decode("utf-8")
 
-
-        # --------------------------------------------------------
-        # Cria o usuário com os dados da conta
-        # e os dados da propriedade
-        # --------------------------------------------------------
-
+        # Cria o usuário
         usuario = Usuario(
 
-            # Dados da conta
             nome=form.nome.data,
             email=form.email.data,
             senha_hash=senha_hash,
             tipo=form.tipo.data,
 
-            # Dados da propriedade
             propriedade=form.propriedade.data,
             municipio=form.municipio.data,
             vicinal=form.vicinal.data,
 
-            # Localização geográfica
             latitude=form.latitude.data,
             longitude=form.longitude.data
         )
 
-
-        # --------------------------------------------------------
-        # Salva no PostgreSQL
-        # --------------------------------------------------------
-
+        # Salva no banco
         db.session.add(usuario)
         db.session.commit()
-
-
-        # --------------------------------------------------------
-        # Mensagem de sucesso
-        # --------------------------------------------------------
 
         flash(
             "Conta criada com sucesso!",
             "success"
         )
 
-
         return redirect(
             url_for("auth.login")
         )
-
 
     return render_template(
         "cadastro.html",
@@ -124,14 +100,9 @@ def login():
 
     if form.validate_on_submit():
 
-        # --------------------------------------------------------
-        # Procura o usuário pelo e-mail
-        # --------------------------------------------------------
-
         usuario = Usuario.query.filter_by(
             email=form.email.data
         ).first()
-
 
         if not usuario:
 
@@ -144,16 +115,10 @@ def login():
                 url_for("auth.login")
             )
 
-
-        # --------------------------------------------------------
-        # Verifica a senha
-        # --------------------------------------------------------
-
         senha_correta = bcrypt.check_password_hash(
             usuario.senha_hash,
             form.senha.data
         )
-
 
         if not senha_correta:
 
@@ -166,24 +131,16 @@ def login():
                 url_for("auth.login")
             )
 
-
-        # --------------------------------------------------------
-        # Cria a sessão do usuário
-        # --------------------------------------------------------
-
         login_user(usuario)
-
 
         flash(
             "Login realizado com sucesso!",
             "success"
         )
 
-
         return redirect(
             url_for("auth.dashboard")
         )
-
 
     return render_template(
         "login.html",
@@ -200,12 +157,10 @@ def logout():
 
     logout_user()
 
-
     flash(
         "Você saiu da sua conta.",
         "success"
     )
-
 
     return redirect(
         url_for("auth.login")
@@ -222,4 +177,148 @@ def dashboard():
 
     return render_template(
         "dashboard.html"
+    )
+
+
+# ============================================================
+# MINHA PROPRIEDADE
+# ============================================================
+
+@auth.route("/propriedade")
+@login_required
+def minha_propriedade():
+
+    return render_template(
+        "minha_propriedade.html",
+        usuario=current_user
+    )
+
+
+# ============================================================
+# EDITAR INFORMAÇÕES DA PROPRIEDADE
+# ============================================================
+
+@auth.route(
+    "/propriedade/editar",
+    methods=["GET", "POST"]
+)
+@auth.route(
+    "/propriedade/editar",
+    methods=["GET", "POST"]
+)
+@login_required
+def editar_propriedade():
+
+    if request.method == "POST":
+
+        # --------------------------------------------------------
+        # Atualiza somente os dados da propriedade
+        # --------------------------------------------------------
+
+        current_user.propriedade = request.form.get(
+            "propriedade"
+        )
+
+        current_user.municipio = request.form.get(
+            "municipio"
+        )
+
+        current_user.vicinal = request.form.get(
+            "vicinal"
+        )
+
+
+        # --------------------------------------------------------
+        # Salva alterações
+        # --------------------------------------------------------
+
+        db.session.commit()
+
+
+        flash(
+            "Dados da propriedade atualizados com sucesso!",
+            "success"
+        )
+
+
+        return redirect(
+            url_for("auth.minha_propriedade")
+        )
+
+
+    return render_template(
+        "editar_propriedade.html",
+        usuario=current_user
+    )
+
+
+# ============================================================
+# ATUALIZAR LOCALIZAÇÃO
+# ============================================================
+
+@auth.route(
+    "/propriedade/localizacao",
+    methods=["GET", "POST"]
+)
+@login_required
+def atualizar_localizacao():
+
+    if request.method == "POST":
+
+        latitude = request.form.get(
+            "latitude"
+        )
+
+        longitude = request.form.get(
+            "longitude"
+        )
+
+        # Verifica se os dois valores foram enviados
+        if not latitude or not longitude:
+
+            flash(
+                "Não foi possível obter sua localização.",
+                "danger"
+            )
+
+            return redirect(
+                url_for("auth.atualizar_localizacao")
+            )
+
+        try:
+
+            current_user.latitude = float(
+                latitude
+            )
+
+            current_user.longitude = float(
+                longitude
+            )
+
+        except ValueError:
+
+            flash(
+                "A localização recebida não é válida.",
+                "danger"
+            )
+
+            return redirect(
+                url_for("auth.atualizar_localizacao")
+            )
+
+        # Salva a nova localização
+        db.session.commit()
+
+        flash(
+            "Localização atualizada com sucesso!",
+            "success"
+        )
+
+        return redirect(
+            url_for("auth.minha_propriedade")
+        )
+
+    return render_template(
+        "atualizar_localizacao.html",
+        usuario=current_user
     )

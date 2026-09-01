@@ -6,6 +6,23 @@ Identidade Digital - {{ lote.codigo }}
 
 {% block content %}
 
+
+<!-- =============================================================
+     LEAFLET - CSS DO MAPA
+============================================================= -->
+
+{% if lote.produtor
+      and lote.produtor.latitude is not none
+      and lote.produtor.longitude is not none %}
+
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+{% endif %}
+
+
 <div class="container py-4 py-md-5">
 
     <div class="row justify-content-center">
@@ -27,7 +44,10 @@ Identidade Digital - {{ lote.codigo }}
 
                     <div class="text-center mb-4">
 
-                        <div class="mb-2" style="font-size: 2.4rem;">
+                        <div
+                            class="mb-2"
+                            style="font-size: 2.4rem;"
+                        >
                             🌱
                         </div>
 
@@ -170,23 +190,58 @@ Identidade Digital - {{ lote.codigo }}
                             {% endif %}
 
 
-                            <!-- COORDENADAS -->
+                            <!-- =================================================
+                                 LOCALIZAÇÃO / COORDENADAS
+                            ================================================== -->
 
                             {% if lote.produtor.latitude is not none
                                   and lote.produtor.longitude is not none %}
 
-                                <div class="row g-3">
 
-                                    <div class="col-12 col-md-6">
+                                <div
+                                    id="dados-mapa"
+                                    data-latitude="{{ lote.produtor.latitude }}"
+                                    data-longitude="{{ lote.produtor.longitude }}"
+                                    data-propriedade="{{ lote.produtor.propriedade or '' }}"
+                                    data-municipio="{{ lote.produtor.municipio or '' }}"
+                                >
 
-                                        <div class="border rounded-3 p-3 h-100">
 
-                                            <div class="text-muted small mb-1">
-                                                🌎 Latitude
+                                    <div class="row g-3 mb-4">
+
+                                        <!-- LATITUDE -->
+
+                                        <div class="col-12 col-md-6">
+
+                                            <div class="border rounded-3 p-3 h-100">
+
+                                                <div class="text-muted small mb-1">
+                                                    🌎 Latitude
+                                                </div>
+
+                                                <div class="fw-semibold">
+                                                    {{ lote.produtor.latitude }}
+                                                </div>
+
                                             </div>
 
-                                            <div class="fw-semibold">
-                                                {{ lote.produtor.latitude }}
+                                        </div>
+
+
+                                        <!-- LONGITUDE -->
+
+                                        <div class="col-12 col-md-6">
+
+                                            <div class="border rounded-3 p-3 h-100">
+
+                                                <div class="text-muted small mb-1">
+                                                    🌎 Longitude
+                                                </div>
+
+                                                <div class="fw-semibold">
+                                                    {{ lote.produtor.longitude }}
+                                                </div>
+
                                             </div>
 
                                         </div>
@@ -194,19 +249,31 @@ Identidade Digital - {{ lote.codigo }}
                                     </div>
 
 
-                                    <div class="col-12 col-md-6">
+                                    <!-- =================================================
+                                         MAPA
+                                    ================================================== -->
 
-                                        <div class="border rounded-3 p-3 h-100">
+                                    <div class="mt-4">
 
-                                            <div class="text-muted small mb-1">
-                                                🌎 Longitude
-                                            </div>
+                                        <h6 class="fw-bold mb-3">
+                                            🗺️ Localização da propriedade
+                                        </h6>
 
-                                            <div class="fw-semibold">
-                                                {{ lote.produtor.longitude }}
-                                            </div>
 
-                                        </div>
+                                        <div
+                                            id="mapa-origem"
+                                            style="
+                                                height: 320px;
+                                                width: 100%;
+                                                border-radius: 12px;
+                                                overflow: hidden;
+                                            "
+                                        ></div>
+
+
+                                        <p class="text-muted small mt-2 mb-0">
+                                            📍 Localização registrada da origem do lote.
+                                        </p>
 
                                     </div>
 
@@ -419,7 +486,10 @@ Identidade Digital - {{ lote.codigo }}
 
                     <div class="text-center">
 
-                        <div class="mb-2" style="font-size: 1.8rem;">
+                        <div
+                            class="mb-2"
+                            style="font-size: 1.8rem;"
+                        >
                             🔎
                         </div>
 
@@ -482,5 +552,126 @@ Identidade Digital - {{ lote.codigo }}
     </div>
 
 </div>
+
+
+<!-- =============================================================
+     LEAFLET - JAVASCRIPT
+============================================================= -->
+
+{% if lote.produtor
+      and lote.produtor.latitude is not none
+      and lote.produtor.longitude is not none %}
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+
+<script>
+
+    // ============================================================
+    // ELEMENTO COM OS DADOS DO MAPA
+    // ============================================================
+
+    const dadosMapa = document.getElementById("dados-mapa");
+
+
+    // ============================================================
+    // LEITURA DAS COORDENADAS
+    // ============================================================
+
+    const latitude = Number(
+        dadosMapa.dataset.latitude
+    );
+
+    const longitude = Number(
+        dadosMapa.dataset.longitude
+    );
+
+
+    // ============================================================
+    // DADOS DA PROPRIEDADE
+    // ============================================================
+
+    const propriedade =
+        dadosMapa.dataset.propriedade;
+
+    const municipio =
+        dadosMapa.dataset.municipio;
+
+
+    // ============================================================
+    // CRIAÇÃO DO MAPA
+    // ============================================================
+
+    const mapa = L.map("mapa-origem").setView(
+        [latitude, longitude],
+        14
+    );
+
+
+    // ============================================================
+    // OPENSTREETMAP
+    // ============================================================
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            maxZoom: 19,
+
+            attribution:
+                "&copy; OpenStreetMap contributors"
+        }
+    ).addTo(mapa);
+
+
+    // ============================================================
+    // MARCADOR
+    // ============================================================
+
+    const marcador = L.marker(
+        [latitude, longitude]
+    ).addTo(mapa);
+
+
+    // ============================================================
+    // TEXTO DO MARCADOR
+    // ============================================================
+
+    let popupHtml = `
+        <strong>🌱 OriginTech Amazônia</strong>
+    `;
+
+
+    if (propriedade) {
+
+        popupHtml += `
+            <br>${propriedade}
+        `;
+
+    }
+
+
+    if (municipio) {
+
+        popupHtml += `
+            <br>${municipio}
+        `;
+
+    }
+
+
+    // ============================================================
+    // POPUP
+    // ============================================================
+
+    marcador
+        .bindPopup(popupHtml)
+        .openPopup();
+
+</script>
+
+{% endif %}
+
 
 {% endblock %}
