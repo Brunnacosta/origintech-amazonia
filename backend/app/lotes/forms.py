@@ -1,14 +1,27 @@
 from flask_wtf import FlaskForm
+
 from wtforms import (
     StringField,
     DateField,
     FloatField,
     SubmitField
 )
-from wtforms.validators import DataRequired, Optional
 
+from wtforms.validators import (
+    DataRequired,
+    Optional
+)
+
+
+# ============================================================
+# FORMULÁRIO DE CADASTRO E EDIÇÃO DE LOTE
+# ============================================================
 
 class LoteForm(FlaskForm):
+
+    # ========================================================
+    # IDENTIFICAÇÃO DO LOTE
+    # ========================================================
 
     codigo = StringField(
         "Código do lote",
@@ -23,6 +36,11 @@ class LoteForm(FlaskForm):
             DataRequired()
         ]
     )
+
+
+    # ========================================================
+    # DADOS DA COLHEITA
+    # ========================================================
 
     data_colheita = DateField(
         "Data da colheita",
@@ -39,6 +57,11 @@ class LoteForm(FlaskForm):
         ]
     )
 
+
+    # ========================================================
+    # BENEFICIAMENTO
+    # ========================================================
+
     fermentacao = StringField(
         "Fermentação",
         validators=[
@@ -53,6 +76,11 @@ class LoteForm(FlaskForm):
         ]
     )
 
+
+    # ========================================================
+    # QUALIDADE
+    # ========================================================
+
     umidade = FloatField(
         "Umidade (%)",
         validators=[
@@ -66,6 +94,11 @@ class LoteForm(FlaskForm):
             Optional()
         ]
     )
+
+
+    # ========================================================
+    # BOTÃO
+    # ========================================================
 
     submit = SubmitField(
         "Cadastrar lote"

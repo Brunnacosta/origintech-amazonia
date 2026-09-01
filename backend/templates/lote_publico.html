@@ -101,6 +101,126 @@ Identidade Digital - {{ lote.codigo }}
 
 
                     <!-- =================================================
+                         ORIGEM DO PRODUTOR
+                    ================================================== -->
+
+                    {% if lote.produtor %}
+
+                        <div class="bg-light rounded-3 p-3 p-md-4 mb-4">
+
+                            <h5 class="fw-bold mb-4">
+                                📍 Origem do produtor
+                            </h5>
+
+
+                            <!-- PROPRIEDADE -->
+
+                            {% if lote.produtor.propriedade %}
+
+                                <div class="mb-3">
+
+                                    <div class="text-muted small">
+                                        🏡 Propriedade
+                                    </div>
+
+                                    <div class="fw-semibold">
+                                        {{ lote.produtor.propriedade }}
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <!-- MUNICÍPIO -->
+
+                            {% if lote.produtor.municipio %}
+
+                                <div class="mb-3">
+
+                                    <div class="text-muted small">
+                                        📍 Município
+                                    </div>
+
+                                    <div class="fw-semibold">
+                                        {{ lote.produtor.municipio }}
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <!-- VICINAL -->
+
+                            {% if lote.produtor.vicinal %}
+
+                                <div class="mb-3">
+
+                                    <div class="text-muted small">
+                                        🛣️ Vicinal
+                                    </div>
+
+                                    <div class="fw-semibold">
+                                        {{ lote.produtor.vicinal }}
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <!-- COORDENADAS -->
+
+                            {% if lote.produtor.latitude is not none
+                                  and lote.produtor.longitude is not none %}
+
+                                <div class="row g-3">
+
+                                    <div class="col-12 col-md-6">
+
+                                        <div class="border rounded-3 p-3 h-100">
+
+                                            <div class="text-muted small mb-1">
+                                                🌎 Latitude
+                                            </div>
+
+                                            <div class="fw-semibold">
+                                                {{ lote.produtor.latitude }}
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-12 col-md-6">
+
+                                        <div class="border rounded-3 p-3 h-100">
+
+                                            <div class="text-muted small mb-1">
+                                                🌎 Longitude
+                                            </div>
+
+                                            <div class="fw-semibold">
+                                                {{ lote.produtor.longitude }}
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- =================================================
                          RESUMO DO LOTE
                     ================================================== -->
 
@@ -200,9 +320,7 @@ Identidade Digital - {{ lote.codigo }}
                                     </div>
 
                                     <div class="fw-semibold">
-
                                         {{ lote.fermentacao }}
-
                                     </div>
 
                                 </div>
@@ -221,9 +339,7 @@ Identidade Digital - {{ lote.codigo }}
                                     </div>
 
                                     <div class="fw-semibold">
-
                                         {{ lote.secagem }}
-
                                     </div>
 
                                 </div>

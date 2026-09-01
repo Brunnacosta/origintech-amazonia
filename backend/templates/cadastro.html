@@ -6,53 +6,155 @@ Cadastro
 
 {% block content %}
 
-<div class="container py-5">
+<div class="container py-4 py-md-5">
 
     <div class="row justify-content-center">
 
-        <div class="col-md-6">
+        <div class="col-12 col-md-8 col-lg-7">
 
-            <div class="card shadow">
+            <div class="card shadow border-0">
 
-                <div class="card-body p-4">
+                <div class="card-body p-4 p-md-5">
 
-                    <h2 class="mb-4 text-center">
-                        Criar Conta
-                    </h2>
+                    <!-- =================================================
+                         CABEÇALHO
+                    ================================================== -->
+
+                    <div class="text-center mb-4">
+
+                        <div
+                            class="mb-2"
+                            style="font-size: 2.5rem;"
+                        >
+                            🌱
+                        </div>
+
+                        <h2 class="fw-bold mb-1">
+                            Criar Conta
+                        </h2>
+
+                        <p class="text-muted mb-0">
+                            Cadastre seus dados para começar
+                            na OriginTech Amazônia.
+                        </p>
+
+                    </div>
+
 
                     <form method="POST">
 
                         {{ form.hidden_tag() }}
 
+
+                        <!-- =================================================
+                             DADOS DA CONTA
+                        ================================================== -->
+
+                        <h5 class="fw-bold mb-3">
+                            👤 Dados da conta
+                        </h5>
+
+
+                        <!-- NOME -->
+
                         <div class="mb-3">
 
-                            {{ form.nome.label(class="form-label") }}
+                            {{ form.nome.label(
+                                class="form-label"
+                            ) }}
 
                             {{ form.nome(
-                                class="form-control"
+                                class="form-control",
+                                placeholder="Seu nome completo"
                             ) }}
+
+                            {% if form.nome.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    {% for erro in form.nome.errors %}
+
+                                        {{ erro }}
+
+                                    {% endfor %}
+
+                                </div>
+
+                            {% endif %}
 
                         </div>
 
+
+                        <!-- EMAIL -->
+
                         <div class="mb-3">
 
-                            {{ form.email.label(class="form-label") }}
+                            {{ form.email.label(
+                                class="form-label"
+                            ) }}
 
                             {{ form.email(
-                                class="form-control"
+                                class="form-control",
+                                type="email",
+                                placeholder="seu@email.com"
                             ) }}
+
+                            {% if form.email.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    {% for erro in form.email.errors %}
+
+                                        {{ erro }}
+
+                                    {% endfor %}
+
+                                </div>
+
+                            {% endif %}
 
                         </div>
 
-                        <div class="mb-3">
 
-                            {{ form.senha.label(class="form-label") }}
+                        <!-- SENHA -->
+
+                        <div class="mb-4">
+
+                            {{ form.senha.label(
+                                class="form-label"
+                            ) }}
 
                             {{ form.senha(
-                                class="form-control"
+                                class="form-control",
+                                type="password",
+                                placeholder="Mínimo de 6 caracteres"
                             ) }}
 
+                            {% if form.senha.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    {% for erro in form.senha.errors %}
+
+                                        {{ erro }}
+
+                                    {% endfor %}
+
+                                </div>
+
+                            {% endif %}
+
                         </div>
+
+
+                        <!-- =================================================
+                             TIPO DE USUÁRIO
+                        ================================================== -->
+
+                        <h5 class="fw-bold mb-3">
+                            👥 Tipo de usuário
+                        </h5>
+
 
                         <div class="mb-4">
 
@@ -64,7 +166,7 @@ Cadastro
 
                                 {% for subfield in form.tipo %}
 
-                                    <div class="form-check">
+                                    <div class="form-check mb-2">
 
                                         {{ subfield(
                                             class="form-check-input"
@@ -82,11 +184,206 @@ Cadastro
 
                         </div>
 
-                        {{ form.submit(
-                            class="btn btn-success w-100"
-                        ) }}
+
+                        <!-- =================================================
+                             DADOS DA PROPRIEDADE
+                        ================================================== -->
+
+                        <h5 class="fw-bold mb-3">
+                            🏡 Dados da propriedade
+                        </h5>
+
+                        <p class="text-muted small">
+                            Esses dados ajudam a construir a identidade
+                            e a origem digital dos seus lotes.
+                        </p>
+
+
+                        <!-- PROPRIEDADE -->
+
+                        <div class="mb-3">
+
+                            {{ form.propriedade.label(
+                                class="form-label"
+                            ) }}
+
+                            {{ form.propriedade(
+                                class="form-control",
+                                placeholder="Ex.: Sítio Boa Esperança"
+                            ) }}
+
+                            {% if form.propriedade.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    {% for erro in form.propriedade.errors %}
+
+                                        {{ erro }}
+
+                                    {% endfor %}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- MUNICÍPIO -->
+
+                        <div class="mb-3">
+
+                            {{ form.municipio.label(
+                                class="form-label"
+                            ) }}
+
+                            {{ form.municipio(
+                                class="form-control",
+                                placeholder="Ex.: Uruará"
+                            ) }}
+
+                            {% if form.municipio.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    {% for erro in form.municipio.errors %}
+
+                                        {{ erro }}
+
+                                    {% endfor %}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- VICINAL -->
+
+                        <div class="mb-4">
+
+                            {{ form.vicinal.label(
+                                class="form-label"
+                            ) }}
+
+                            {{ form.vicinal(
+                                class="form-control",
+                                placeholder="Ex.: Linha Sul / KM 140"
+                            ) }}
+
+                            {% if form.vicinal.errors %}
+
+                                <div class="text-danger small mt-1">
+
+                                    {% for erro in form.vicinal.errors %}
+
+                                        {{ erro }}
+
+                                    {% endfor %}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- =================================================
+                             LOCALIZAÇÃO GEOGRÁFICA
+                        ================================================== -->
+
+                        <h5 class="fw-bold mb-3">
+                            📍 Localização geográfica
+                        </h5>
+
+                        <p class="text-muted small">
+                            A localização poderá ser utilizada futuramente
+                            para recursos de rastreabilidade e mapas.
+                        </p>
+
+
+                        <div class="row">
+
+                            <!-- LATITUDE -->
+
+                            <div class="col-12 col-md-6 mb-3">
+
+                                {{ form.latitude.label(
+                                    class="form-label"
+                                ) }}
+
+                                {{ form.latitude(
+                                    class="form-control",
+                                    placeholder="Ex.: -3.7158"
+                                ) }}
+
+                                {% if form.latitude.errors %}
+
+                                    <div class="text-danger small mt-1">
+
+                                        {% for erro in form.latitude.errors %}
+
+                                            {{ erro }}
+
+                                        {% endfor %}
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- LONGITUDE -->
+
+                            <div class="col-12 col-md-6 mb-3">
+
+                                {{ form.longitude.label(
+                                    class="form-label"
+                                ) }}
+
+                                {{ form.longitude(
+                                    class="form-control",
+                                    placeholder="Ex.: -53.7392"
+                                ) }}
+
+                                {% if form.longitude.errors %}
+
+                                    <div class="text-danger small mt-1">
+
+                                        {% for erro in form.longitude.errors %}
+
+                                            {{ erro }}
+
+                                        {% endfor %}
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =================================================
+                             BOTÃO
+                        ================================================== -->
+
+                        <button
+                            type="submit"
+                            class="btn btn-success w-100 mt-3"
+                        >
+                            Criar conta
+                        </button>
 
                     </form>
+
+
+                    <!-- =================================================
+                         LOGIN
+                    ================================================== -->
 
                     <div class="text-center mt-4">
 
