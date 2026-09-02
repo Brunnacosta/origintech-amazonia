@@ -73,7 +73,7 @@ def novo_lote():
         )
 
         return redirect(
-            url_for("lotes.meus_lotes")
+            url_for("lotes.meus_lote")
         )
 
     return render_template(
@@ -279,7 +279,14 @@ def lote_publico(codigo):
 
     lote = Lote.query.filter_by(
         codigo=codigo
-    ).first_or_404()
+    ).first()
+
+    if not lote:
+
+        return render_template(
+            "lote_nao_encontrado.html",
+            codigo=codigo
+        ), 404
 
     return render_template(
         "lote_publico.html",

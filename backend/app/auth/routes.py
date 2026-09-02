@@ -33,7 +33,10 @@ def cadastro():
 
     if form.validate_on_submit():
 
+        # --------------------------------------------------------
         # Verifica se o e-mail já existe
+        # --------------------------------------------------------
+
         usuario_existente = Usuario.query.filter_by(
             email=form.email.data
         ).first()
@@ -49,12 +52,18 @@ def cadastro():
                 url_for("auth.cadastro")
             )
 
+        # --------------------------------------------------------
         # Cria o hash da senha
+        # --------------------------------------------------------
+
         senha_hash = bcrypt.generate_password_hash(
             form.senha.data
         ).decode("utf-8")
 
+        # --------------------------------------------------------
         # Cria o usuário
+        # --------------------------------------------------------
+
         usuario = Usuario(
 
             nome=form.nome.data,
@@ -70,7 +79,10 @@ def cadastro():
             longitude=form.longitude.data
         )
 
+        # --------------------------------------------------------
         # Salva no banco
+        # --------------------------------------------------------
+
         db.session.add(usuario)
         db.session.commit()
 
@@ -100,9 +112,17 @@ def login():
 
     if form.validate_on_submit():
 
+        # --------------------------------------------------------
+        # Procura o usuário pelo e-mail
+        # --------------------------------------------------------
+
         usuario = Usuario.query.filter_by(
             email=form.email.data
         ).first()
+
+        # --------------------------------------------------------
+        # Usuário não encontrado
+        # --------------------------------------------------------
 
         if not usuario:
 
@@ -114,6 +134,10 @@ def login():
             return redirect(
                 url_for("auth.login")
             )
+
+        # --------------------------------------------------------
+        # Verifica a senha
+        # --------------------------------------------------------
 
         senha_correta = bcrypt.check_password_hash(
             usuario.senha_hash,
@@ -130,6 +154,10 @@ def login():
             return redirect(
                 url_for("auth.login")
             )
+
+        # --------------------------------------------------------
+        # Realiza o login
+        # --------------------------------------------------------
 
         login_user(usuario)
 
@@ -202,17 +230,13 @@ def minha_propriedade():
     "/propriedade/editar",
     methods=["GET", "POST"]
 )
-@auth.route(
-    "/propriedade/editar",
-    methods=["GET", "POST"]
-)
 @login_required
 def editar_propriedade():
 
     if request.method == "POST":
 
         # --------------------------------------------------------
-        # Atualiza somente os dados da propriedade
+        # Atualiza os dados da propriedade
         # --------------------------------------------------------
 
         current_user.propriedade = request.form.get(
@@ -227,24 +251,20 @@ def editar_propriedade():
             "vicinal"
         )
 
-
         # --------------------------------------------------------
         # Salva alterações
         # --------------------------------------------------------
 
         db.session.commit()
 
-
         flash(
             "Dados da propriedade atualizados com sucesso!",
             "success"
         )
 
-
         return redirect(
             url_for("auth.minha_propriedade")
         )
-
 
     return render_template(
         "editar_propriedade.html",
@@ -265,6 +285,10 @@ def atualizar_localizacao():
 
     if request.method == "POST":
 
+        # --------------------------------------------------------
+        # Recebe latitude e longitude
+        # --------------------------------------------------------
+
         latitude = request.form.get(
             "latitude"
         )
@@ -273,7 +297,10 @@ def atualizar_localizacao():
             "longitude"
         )
 
-        # Verifica se os dois valores foram enviados
+        # --------------------------------------------------------
+        # Verifica se os valores foram enviados
+        # --------------------------------------------------------
+
         if not latitude or not longitude:
 
             flash(
@@ -284,6 +311,10 @@ def atualizar_localizacao():
             return redirect(
                 url_for("auth.atualizar_localizacao")
             )
+
+        # --------------------------------------------------------
+        # Converte os valores para número
+        # --------------------------------------------------------
 
         try:
 
@@ -306,7 +337,10 @@ def atualizar_localizacao():
                 url_for("auth.atualizar_localizacao")
             )
 
+        # --------------------------------------------------------
         # Salva a nova localização
+        # --------------------------------------------------------
+
         db.session.commit()
 
         flash(

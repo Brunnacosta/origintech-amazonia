@@ -4,159 +4,437 @@
 OriginTech Amazônia
 {% endblock %}
 
+
 {% block content %}
 
-<!-- HERO -->
 
-<section class="container py-5">
+<!-- ============================================================
+     HERO
+============================================================ -->
 
-    <div class="row">
+<section class="py-5">
 
-        <div class="col-lg-7">
+    <div class="container py-4 py-md-5">
 
-            <h1 class="display-4 fw-bold text-success">
+        <div class="row align-items-center g-5">
 
-                Transformando a origem em valor.
 
-            </h1>
+            <!-- ====================================================
+                 TEXTO PRINCIPAL
+            ===================================================== -->
 
-            <p class="lead mt-4">
+            <div class="col-12 col-lg-7">
 
-                Plataforma de rastreabilidade, inteligência de mercado
-                e comercialização do cacau amazônico.
+                <div class="mb-3">
+
+                    <span class="badge bg-success px-3 py-2">
+
+                        🌱 Tecnologia para o cacau amazônico
+
+                    </span>
+
+                </div>
+
+
+                <h1 class="display-4 fw-bold mb-4">
+
+                    Damos identidade,
+
+                    <span class="text-success">
+
+                        origem e valor
+
+                    </span>
+
+                    ao cacau amazônico.
+
+                </h1>
+
+
+                <p class="lead text-muted mb-4">
+
+                    A OriginTech Amazônia conecta produtores,
+                    lotes e compradores por meio da tecnologia,
+                    rastreabilidade e informação.
+
+                </p>
+
+
+                <!-- =================================================
+                     BOTÕES PRINCIPAIS
+                ================================================== -->
+
+                <div class="d-grid d-md-flex gap-3">
+
+
+                    <!-- CONSULTAR LOTE -->
+
+                    <a
+                        href="{{ url_for('main.consultar_lote') }}"
+                        class="btn btn-success btn-lg px-4"
+                    >
+
+                        🔎 Consultar um lote
+
+                    </a>
+
+
+                    <!-- SOU PRODUTOR -->
+
+                    <a
+                        href="{{ url_for('auth.cadastro') }}"
+                        class="btn btn-outline-success btn-lg px-4"
+                    >
+
+                        👨‍🌾 Sou produtor
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- ====================================================
+                 DESTAQUE VISUAL
+            ===================================================== -->
+
+            <div class="col-12 col-lg-5">
+
+                <div class="card border-0 shadow-sm">
+
+                    <div class="card-body p-4 p-md-5 text-center">
+
+                        <div
+                            style="font-size: 5rem;"
+                            class="mb-3"
+                        >
+                            🍫
+                        </div>
+
+
+                        <h3 class="fw-bold">
+
+                            Origem que conta uma história.
+
+                        </h3>
+
+
+                        <p class="text-muted mb-0">
+
+                            Cada lote pode ter uma identidade digital,
+                            uma origem registrada e uma história para contar.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ============================================================
+     COMO FUNCIONA
+============================================================ -->
+
+<section class="py-5 bg-light">
+
+    <div class="container">
+
+
+        <!-- TÍTULO -->
+
+        <div class="text-center mb-5">
+
+            <h2 class="fw-bold">
+
+                Como funciona?
+
+            </h2>
+
+
+            <p class="text-muted">
+
+                Simples para o produtor. Inteligente por trás.
 
             </p>
 
-            <div class="mt-4">
+        </div>
 
-                <a href="#" class="btn btn-success btn-lg">
 
-                    Sou Produtor
+        <div class="row g-4">
+
+
+            <!-- =================================================
+                 ETAPA 1
+            ================================================== -->
+
+            <div class="col-12 col-md-6 col-lg-3">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-body text-center p-4">
+
+                        <div
+                            class="mb-3"
+                            style="font-size: 2.5rem;"
+                        >
+                            👨‍🌾
+                        </div>
+
+
+                        <h5 class="fw-bold">
+
+                            1. Produtor
+
+                        </h5>
+
+
+                        <p class="text-muted mb-0">
+
+                            O produtor cadastra sua propriedade
+                            e seus lotes de cacau.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ETAPA 2
+            ================================================== -->
+
+            <div class="col-12 col-md-6 col-lg-3">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-body text-center p-4">
+
+                        <div
+                            class="mb-3"
+                            style="font-size: 2.5rem;"
+                        >
+                            🌱
+                        </div>
+
+
+                        <h5 class="fw-bold">
+
+                            2. Origem
+
+                        </h5>
+
+
+                        <p class="text-muted mb-0">
+
+                            A plataforma registra as informações
+                            de origem e produção.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ETAPA 3
+            ================================================== -->
+
+            <div class="col-12 col-md-6 col-lg-3">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-body text-center p-4">
+
+                        <div
+                            class="mb-3"
+                            style="font-size: 2.5rem;"
+                        >
+                            📱
+                        </div>
+
+
+                        <h5 class="fw-bold">
+
+                            3. QR Code
+
+                        </h5>
+
+
+                        <p class="text-muted mb-0">
+
+                            Cada lote pode receber uma identidade
+                            digital por meio de um QR Code.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ETAPA 4
+            ================================================== -->
+
+            <div class="col-12 col-md-6 col-lg-3">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-body text-center p-4">
+
+                        <div
+                            class="mb-3"
+                            style="font-size: 2.5rem;"
+                        >
+                            🔎
+                        </div>
+
+
+                        <h5 class="fw-bold">
+
+                            4. Consulta
+
+                        </h5>
+
+
+                        <p class="text-muted mb-0">
+
+                            Compradores e consumidores podem
+                            conhecer a origem do lote.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ============================================================
+     CONSULTAR LOTE
+============================================================ -->
+
+<section
+    id="consultar-lote"
+    class="py-5"
+>
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-12 col-md-8 col-lg-6">
+
+                <div class="card border-0 shadow">
+
+                    <div class="card-body p-4 p-md-5 text-center">
+
+
+                        <!-- ÍCONE -->
+
+                        <div
+                            style="font-size: 3rem;"
+                            class="mb-3"
+                        >
+
+                            🔎
+
+                        </div>
+
+
+                        <!-- TÍTULO -->
+
+                        <h3 class="fw-bold mb-3">
+
+                            Conheça a origem do seu cacau
+
+                        </h3>
+
+
+                        <!-- DESCRIÇÃO -->
+
+                        <p class="text-muted mb-0">
+
+                            Consulte um lote pelo código ou
+                            escaneie seu QR Code para conhecer
+                            sua origem e informações de produção.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ============================================================
+     CHAMADA PARA PRODUTORES
+============================================================ -->
+
+<section class="py-5 bg-success text-white">
+
+    <div class="container">
+
+        <div class="row justify-content-center text-center">
+
+            <div class="col-12 col-lg-8">
+
+
+                <h2 class="fw-bold mb-3">
+
+                    Você produz cacau?
+
+                </h2>
+
+
+                <p class="lead mb-4">
+
+                    Cadastre sua propriedade e comece a dar
+                    identidade digital aos seus lotes.
+
+                </p>
+
+
+                <a
+                    href="{{ url_for('auth.cadastro') }}"
+                    class="btn btn-light btn-lg px-4"
+                >
+
+                    👨‍🌾 Criar minha conta
 
                 </a>
 
-                <a href="#" class="btn btn-outline-success btn-lg ms-2">
-
-                    Sou Comprador
-
-                </a>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- MÓDULOS -->
-
-<section class="container py-5">
-
-    <h2 class="text-center fw-bold mb-5">
-
-        Nossos Módulos
-
-    </h2>
-
-    <div class="row g-4">
-
-        <div class="col-md-4">
-
-            <div class="card h-100 shadow-sm">
-
-                <div class="card-body">
-
-                    <h4>📍 Rastreabilidade</h4>
-
-                    <p>
-
-                        Cada lote possui uma identidade digital completa.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-md-4">
-
-            <div class="card h-100 shadow-sm">
-
-                <div class="card-body">
-
-                    <h4>🤖 Origin AI</h4>
-
-                    <p>
-
-                        Inteligência artificial para análise da produção.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-md-4">
-
-            <div class="card h-100 shadow-sm">
-
-                <div class="card-body">
-
-                    <h4>📦 Marketplace</h4>
-
-                    <p>
-
-                        Conectando produtores e compradores.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-md-6">
-
-            <div class="card h-100 shadow-sm">
-
-                <div class="card-body">
-
-                    <h4>📊 Inteligência de Mercado</h4>
-
-                    <p>
-
-                        Indicadores para melhores decisões comerciais.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-md-6">
-
-            <div class="card h-100 shadow-sm">
-
-                <div class="card-body">
-
-                    <h4>🌱 ESG</h4>
-
-                    <p>
-
-                        Sustentabilidade, origem e transparência.
-
-                    </p>
-
-                </div>
-
             </div>
 
         </div>
@@ -166,62 +444,28 @@ OriginTech Amazônia
 </section>
 
 
-<!-- MÉTRICAS -->
+<!-- ============================================================
+     RODAPÉ INFORMATIVO
+============================================================ -->
 
-<section class="container py-5">
+<section class="py-4">
 
-    <div class="text-center mb-5">
+    <div class="container">
 
-        <h2 class="fw-bold">
+        <div class="text-center text-muted">
 
-            A tecnologia a serviço do cacau amazônico
+            <small>
 
-        </h2>
+                🌱 OriginTech Amazônia —
+                Tecnologia, origem e valor para o cacau amazônico.
 
-        <p class="text-muted">
-
-            Construindo uma cadeia mais transparente, conectada e inteligente.
-
-        </p>
-
-    </div>
-
-    <div class="row text-center">
-
-        <div class="col-md-3 mb-4">
-
-            <h1 class="text-success fw-bold">2.500+</h1>
-
-            <p>Lotes Rastreados</p>
-
-        </div>
-
-        <div class="col-md-3 mb-4">
-
-            <h1 class="text-success fw-bold">350+</h1>
-
-            <p>Produtores</p>
-
-        </div>
-
-        <div class="col-md-3 mb-4">
-
-            <h1 class="text-success fw-bold">120+</h1>
-
-            <p>Compradores</p>
-
-        </div>
-
-        <div class="col-md-3 mb-4">
-
-            <h1 class="text-success fw-bold">18</h1>
-
-            <p>Municípios</p>
+            </small>
 
         </div>
 
     </div>
 
 </section>
+
 
 {% endblock %}
