@@ -12,7 +12,10 @@ from flask import (
     send_file
 )
 
-from flask_login import login_required, current_user
+from flask_login import (
+    login_required,
+    current_user
+)
 
 from app.extensions import db
 from app.models import Lote
@@ -44,7 +47,10 @@ def meus_lotes():
 # CADASTRAR LOTE
 # ============================================================
 
-@lotes.route("/lotes/novo", methods=["GET", "POST"])
+@lotes.route(
+    "/lotes/novo",
+    methods=["GET", "POST"]
+)
 @login_required
 def novo_lote():
 
@@ -53,14 +59,27 @@ def novo_lote():
     if form.validate_on_submit():
 
         lote = Lote(
+
+            # Identificação
             codigo=form.codigo.data,
-            nome=form.nome.data,
+
+            # Campo antigo do banco.
+            # Por enquanto usamos o código como valor interno.
+            nome=form.codigo.data,
+
+            # Dados da colheita
             data_colheita=form.data_colheita.data,
             quantidade_kg=form.quantidade_kg.data,
+
+            # Beneficiamento
             fermentacao=form.fermentacao.data,
             secagem=form.secagem.data,
+
+            # Qualidade
             umidade=form.umidade.data,
             sistema_producao=form.sistema_producao.data,
+
+            # Produtor logado
             produtor_id=current_user.id
         )
 
@@ -73,12 +92,13 @@ def novo_lote():
         )
 
         return redirect(
-            url_for("lotes.meus_lote")
+            url_for("lotes.meus_lotes")
         )
 
     return render_template(
         "lote_form.html",
-        form=form
+        form=form,
+        usuario=current_user
     )
 
 
@@ -122,12 +142,21 @@ def editar_lote(lote_id):
     if form.validate_on_submit():
 
         lote.codigo = form.codigo.data
-        lote.nome = form.nome.data
+
+        # Mantém o campo técnico antigo sincronizado
+        # com o código do lote.
+        lote.nome = form.codigo.data
+
         lote.data_colheita = form.data_colheita.data
+
         lote.quantidade_kg = form.quantidade_kg.data
+
         lote.fermentacao = form.fermentacao.data
+
         lote.secagem = form.secagem.data
+
         lote.umidade = form.umidade.data
+
         lote.sistema_producao = form.sistema_producao.data
 
         db.session.commit()
@@ -146,7 +175,8 @@ def editar_lote(lote_id):
 
     return render_template(
         "lote_form.html",
-        form=form
+        form=form,
+        usuario=current_user
     )
 
 
@@ -167,6 +197,7 @@ def excluir_lote(lote_id):
     ).first_or_404()
 
     db.session.delete(lote)
+
     db.session.commit()
 
     flash(
@@ -183,7 +214,9 @@ def excluir_lote(lote_id):
 # TELA DO QR CODE
 # ============================================================
 
-@lotes.route("/lotes/<int:lote_id>/qrcode")
+@lotes.route(
+    "/lotes/<int:lote_id>/qrcode"
+)
 @login_required
 def qrcode_lote(lote_id):
 
@@ -202,7 +235,9 @@ def qrcode_lote(lote_id):
 # IMAGEM DO QR CODE
 # ============================================================
 
-@lotes.route("/lotes/<int:lote_id>/qrcode/imagem")
+@lotes.route(
+    "/lotes/<int:lote_id>/qrcode/imagem"
+)
 @login_required
 def imagem_qrcode(lote_id):
 
@@ -237,7 +272,9 @@ def imagem_qrcode(lote_id):
 # BAIXAR QR CODE
 # ============================================================
 
-@lotes.route("/lotes/<int:lote_id>/qrcode/download")
+@lotes.route(
+    "/lotes/<int:lote_id>/qrcode/download"
+)
 @login_required
 def baixar_qrcode(lote_id):
 

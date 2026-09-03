@@ -4,12 +4,14 @@ from wtforms import (
     StringField,
     DateField,
     FloatField,
+    SelectField,
     SubmitField
 )
 
 from wtforms.validators import (
     DataRequired,
-    Optional
+    Optional,
+    NumberRange
 )
 
 
@@ -19,19 +21,13 @@ from wtforms.validators import (
 
 class LoteForm(FlaskForm):
 
+
     # ========================================================
     # IDENTIFICAÇÃO DO LOTE
     # ========================================================
 
     codigo = StringField(
         "Código do lote",
-        validators=[
-            DataRequired()
-        ]
-    )
-
-    nome = StringField(
-        "Nome do lote",
         validators=[
             DataRequired()
         ]
@@ -53,7 +49,11 @@ class LoteForm(FlaskForm):
     quantidade_kg = FloatField(
         "Quantidade (kg)",
         validators=[
-            DataRequired()
+            DataRequired(),
+            NumberRange(
+                min=0.1,
+                message="Informe uma quantidade maior que zero."
+            )
         ]
     )
 
@@ -66,11 +66,19 @@ class LoteForm(FlaskForm):
         "Fermentação",
         validators=[
             DataRequired()
-        ]
+        ],
+        description="Informe quantos dias o cacau ficou em fermentação."
     )
 
-    secagem = StringField(
-        "Secagem",
+    secagem = SelectField(
+        "Método de secagem",
+        choices=[
+            ("Natural", "Natural"),
+            ("Solar", "Solar"),
+            ("Secador", "Secador"),
+            ("Mista", "Mista"),
+            ("Outro", "Outro")
+        ],
         validators=[
             DataRequired()
         ]
@@ -84,12 +92,24 @@ class LoteForm(FlaskForm):
     umidade = FloatField(
         "Umidade (%)",
         validators=[
-            Optional()
+            Optional(),
+            NumberRange(
+                min=0,
+                max=100,
+                message="A umidade deve estar entre 0 e 100%."
+            )
         ]
     )
 
-    sistema_producao = StringField(
+    sistema_producao = SelectField(
         "Sistema de produção",
+        choices=[
+            ("Agroflorestal", "Agroflorestal"),
+            ("Orgânico", "Orgânico"),
+            ("Convencional", "Convencional"),
+            ("Misto", "Misto"),
+            ("Outro", "Outro")
+        ],
         validators=[
             Optional()
         ]

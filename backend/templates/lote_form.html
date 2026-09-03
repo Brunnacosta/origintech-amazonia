@@ -1,112 +1,357 @@
 {% extends "base.html" %}
 
 {% block title %}
-Cadastrar Lote
+Cadastrar Lote - OriginTech Amazônia
 {% endblock %}
+
 
 {% block content %}
 
-<div class="container py-5">
+<div class="container py-4 py-md-5">
 
     <div class="row justify-content-center">
 
-        <div class="col-lg-8">
+        <div class="col-12 col-lg-8">
 
-            <div class="card shadow">
+            <div class="card shadow border-0">
 
-                <div class="card-body p-4">
+                <div class="card-body p-4 p-md-5">
 
-                    <h2 class="mb-2">
-                        🌱 Cadastrar Lote
-                    </h2>
 
-                    <p class="text-muted mb-4">
-                        Registre as informações do seu lote de cacau.
-                    </p>
+                    <!-- ====================================================
+                         CABEÇALHO
+                    ===================================================== -->
+
+                    <div class="mb-4">
+
+                        <h2 class="fw-bold mb-2">
+                            🌱 Cadastrar Lote
+                        </h2>
+
+                        <p class="text-muted mb-0">
+                            Registre as informações do seu lote de cacau.
+                        </p>
+
+                    </div>
+
 
                     <form method="POST">
 
                         {{ form.hidden_tag() }}
 
+
+                        <!-- =================================================
+                             IDENTIFICAÇÃO
+                        ================================================== -->
+
+                        <h5 class="fw-bold mb-3">
+                            🏷️ Identificação
+                        </h5>
+
+
                         <div class="row">
 
-                            <div class="col-md-6 mb-3">
 
-                                {{ form.codigo.label(class="form-label") }}
-                                {{ form.codigo(class="form-control") }}
+                            <!-- CÓDIGO -->
+
+                            <div class="col-12 col-md-6 mb-3">
+
+                                {{ form.codigo.label(
+                                    class="form-label"
+                                ) }}
+
+                                {{ form.codigo(
+                                    class="form-control",
+                                    placeholder="Ex.: LOTE-2026-003"
+                                ) }}
+
+                                <div class="form-text">
+                                    Esse código identifica o lote na OriginTech.
+                                </div>
+
+                                {% for error in form.codigo.errors %}
+
+                                    <div class="text-danger small mt-1">
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
 
                             </div>
 
-                            <div class="col-md-6 mb-3">
 
-                                {{ form.nome.label(class="form-label") }}
-                                {{ form.nome(class="form-control") }}
+                            <!-- PROPRIEDADE -->
+
+                            <div class="col-12 col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    🏡 Propriedade
+                                </label>
+
+
+                                {% if current_user.propriedade %}
+
+                                    <input
+                                        type="text"
+                                        class="form-control bg-light"
+                                        value="{{ current_user.propriedade }}"
+                                        readonly
+                                    >
+
+                                    <div class="form-text">
+                                        A propriedade vem automaticamente do seu cadastro.
+                                    </div>
+
+
+                                    <div class="mt-2">
+
+                                        <a
+                                            href="{{ url_for('auth.minha_propriedade') }}"
+                                            class="small text-success text-decoration-none"
+                                        >
+                                            ✏️ Alterar propriedade
+                                        </a>
+
+                                    </div>
+
+                                {% else %}
+
+                                    <div class="alert alert-warning mb-0">
+
+                                        <div class="fw-bold mb-1">
+                                            ⚠️ Propriedade ainda não cadastrada
+                                        </div>
+
+                                        <div class="small mb-3">
+                                            Cadastre sua propriedade antes
+                                            de registrar um lote.
+                                        </div>
+
+                                        <a
+                                            href="{{ url_for('auth.editar_propriedade') }}"
+                                            class="btn btn-sm btn-warning"
+                                        >
+                                            🏡 Cadastrar propriedade
+                                        </a>
+
+                                    </div>
+
+                                {% endif %}
 
                             </div>
 
                         </div>
 
+
+                        <!-- =================================================
+                             COLHEITA
+                        ================================================== -->
+
+                        <h5 class="fw-bold mb-3 mt-3">
+                            📅 Dados da colheita
+                        </h5>
+
+
                         <div class="row">
 
-                            <div class="col-md-6 mb-3">
 
-                                {{ form.data_colheita.label(class="form-label") }}
-                                {{ form.data_colheita(class="form-control") }}
+                            <!-- DATA -->
+
+                            <div class="col-12 col-md-6 mb-3">
+
+                                {{ form.data_colheita.label(
+                                    class="form-label"
+                                ) }}
+
+                                {{ form.data_colheita(
+                                    class="form-control"
+                                ) }}
+
+                                {% for error in form.data_colheita.errors %}
+
+                                    <div class="text-danger small mt-1">
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
 
                             </div>
 
-                            <div class="col-md-6 mb-3">
 
-                                {{ form.quantidade_kg.label(class="form-label") }}
-                                {{ form.quantidade_kg(class="form-control") }}
+                            <!-- QUANTIDADE -->
+
+                            <div class="col-12 col-md-6 mb-3">
+
+                                {{ form.quantidade_kg.label(
+                                    class="form-label"
+                                ) }}
+
+                                {{ form.quantidade_kg(
+                                    class="form-control",
+                                    placeholder="Ex.: 300"
+                                ) }}
+
+                                {% for error in form.quantidade_kg.errors %}
+
+                                    <div class="text-danger small mt-1">
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
 
                             </div>
 
                         </div>
 
+
+                        <!-- =================================================
+                             BENEFICIAMENTO
+                        ================================================== -->
+
+                        <h5 class="fw-bold mb-3 mt-3">
+                            🌱 Beneficiamento
+                        </h5>
+
+
                         <div class="row">
 
-                            <div class="col-md-6 mb-3">
 
-                                {{ form.fermentacao.label(class="form-label") }}
-                                {{ form.fermentacao(class="form-control") }}
+                            <!-- FERMENTAÇÃO -->
+
+                            <div class="col-12 col-md-6 mb-3">
+
+                                {{ form.fermentacao.label(
+                                    class="form-label"
+                                ) }}
+
+                                {{ form.fermentacao(
+                                    class="form-control",
+                                    placeholder="Ex.: 6 dias"
+                                ) }}
+
+                                <div class="form-text">
+                                    Informe por quantos dias o cacau ficou em fermentação.
+                                </div>
+
+                                {% for error in form.fermentacao.errors %}
+
+                                    <div class="text-danger small mt-1">
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
 
                             </div>
 
-                            <div class="col-md-6 mb-3">
 
-                                {{ form.secagem.label(class="form-label") }}
-                                {{ form.secagem(class="form-control") }}
+                            <!-- SECAGEM -->
+
+                            <div class="col-12 col-md-6 mb-3">
+
+                                {{ form.secagem.label(
+                                    class="form-label"
+                                ) }}
+
+                                {{ form.secagem(
+                                    class="form-select"
+                                ) }}
+
+                                {% for error in form.secagem.errors %}
+
+                                    <div class="text-danger small mt-1">
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
 
                             </div>
 
                         </div>
 
+
+                        <!-- =================================================
+                             INFORMAÇÕES DO LOTE
+                        ================================================== -->
+
+                        <h5 class="fw-bold mb-2 mt-3">
+                            📊 Informações do lote
+                        </h5>
+
+                        <p class="text-muted small mb-3">
+                            Algumas informações são opcionais e podem ser
+                            preenchidas somente quando você tiver esses dados.
+                        </p>
+
+
                         <div class="row">
 
-                            <div class="col-md-6 mb-3">
 
-                                {{ form.umidade.label(class="form-label") }}
-                                {{ form.umidade(class="form-control") }}
+                            <!-- UMIDADE -->
+
+                            <div class="col-12 col-md-6 mb-3">
+
+                                {{ form.umidade.label(
+                                    class="form-label"
+                                ) }}
+
+                                {{ form.umidade(
+                                    class="form-control",
+                                    placeholder="Ex.: 7.2"
+                                ) }}
+
+                                <div class="form-text">
+                                    Opcional. Informe somente se você tiver essa medição.
+                                </div>
+
+                                {% for error in form.umidade.errors %}
+
+                                    <div class="text-danger small mt-1">
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
 
                             </div>
 
-                            <div class="col-md-6 mb-3">
 
-                                {{ form.sistema_producao.label(class="form-label") }}
-                                {{ form.sistema_producao(class="form-control") }}
+                            <!-- SISTEMA DE PRODUÇÃO -->
+
+                            <div class="col-12 col-md-6 mb-3">
+
+                                {{ form.sistema_producao.label(
+                                    class="form-label"
+                                ) }}
+
+                                {{ form.sistema_producao(
+                                    class="form-select"
+                                ) }}
+
+                                {% for error in form.sistema_producao.errors %}
+
+                                    <div class="text-danger small mt-1">
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
 
                             </div>
 
                         </div>
 
-                        <div class="d-flex gap-2 mt-3">
 
-                            {{ form.submit(class="btn btn-success") }}
+                        <!-- =================================================
+                             AÇÕES
+                        ================================================== -->
+
+                        <div class="d-grid d-md-flex gap-2 mt-4">
+
+                            {{ form.submit(
+                                class="btn btn-success btn-lg"
+                            ) }}
 
                             <a
-                                href="{{ url_for('main.index') }}"
-                                class="btn btn-outline-secondary"
+                                href="{{ url_for('lotes.meus_lotes') }}"
+                                class="btn btn-outline-secondary btn-lg"
                             >
                                 Cancelar
                             </a>
