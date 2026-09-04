@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-Atualizar Localização
+Atualizar Localização - OriginTech Amazônia
 {% endblock %}
 
 {% block content %}
@@ -11,6 +11,7 @@ Atualizar Localização
     <div class="row justify-content-center">
 
         <div class="col-12 col-md-7 col-lg-5">
+
 
             <!-- =====================================================
                  CABEÇALHO
@@ -29,26 +30,68 @@ Atualizar Localização
                     Atualizar localização
                 </h1>
 
-                <p class="text-muted">
-                    Vamos usar a localização do seu dispositivo.
+                <p class="text-muted mb-0">
+                    Registre a localização desta propriedade.
                 </p>
 
             </div>
 
 
             <!-- =====================================================
-                 CARD
+                 PROPRIEDADE SELECIONADA
+            ====================================================== -->
+
+            <div class="card border-0 shadow-sm mb-4">
+
+                <div class="card-body p-4">
+
+                    <div class="text-muted small mb-1">
+                        🏡 Propriedade
+                    </div>
+
+                    <div class="fw-bold fs-5">
+                        {{ propriedade.nome }}
+                    </div>
+
+
+                    {% if propriedade.municipio %}
+
+                        <div class="text-muted small mt-2">
+                            📍 {{ propriedade.municipio }}
+                        </div>
+
+                    {% endif %}
+
+
+                    {% if propriedade.vicinal %}
+
+                        <div class="text-muted small">
+                            🛣️ {{ propriedade.vicinal }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================================
+                 CARD GPS
             ====================================================== -->
 
             <div class="card border-0 shadow-sm">
 
                 <div class="card-body p-4 p-md-5">
 
+
                     <div class="text-center mb-4">
 
                         <p class="text-muted mb-0">
-                            Toque no botão abaixo para encontrar
-                            automaticamente a localização da sua propriedade.
+
+                            Toque no botão abaixo para obter
+                            automaticamente a localização do seu dispositivo.
+
                         </p>
 
                     </div>
@@ -60,11 +103,17 @@ Atualizar Localização
 
                     <form
                         method="POST"
-                        action="{{ url_for('auth.atualizar_localizacao') }}"
+                        action="{{ url_for(
+                            'auth.atualizar_localizacao',
+                            propriedade_id=propriedade.id
+                        ) }}"
                         id="form-localizacao"
                     >
 
-                        <!-- Campos escondidos -->
+
+                        <!-- =================================================
+                             CAMPOS ESCONDIDOS
+                        ================================================== -->
 
                         <input
                             type="hidden"
@@ -108,19 +157,52 @@ Atualizar Localização
 
 
                         <!-- =================================================
+                             LOCALIZAÇÃO ATUAL
+                        ================================================== -->
+
+                        {% if propriedade.latitude is not none
+                              and propriedade.longitude is not none %}
+
+                            <div class="border rounded-3 p-3 bg-light mt-4">
+
+                                <div class="fw-semibold text-success">
+                                    ✅ Localização atual cadastrada
+                                </div>
+
+                                <div class="text-muted small mt-1">
+
+                                    Latitude:
+                                    {{ propriedade.latitude }}
+
+                                    <br>
+
+                                    Longitude:
+                                    {{ propriedade.longitude }}
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- =================================================
                              VOLTAR
                         ================================================== -->
 
-                        <div class="d-grid mt-3">
+                        <div class="d-grid mt-4">
 
                             <a
-                                href="{{ url_for('auth.minha_propriedade') }}"
+                                href="{{ url_for(
+                                    'auth.minha_propriedade'
+                                ) }}"
                                 class="btn btn-outline-secondary"
                             >
-                                ← Voltar
+                                ← Voltar para propriedades
                             </a>
 
                         </div>
+
 
                     </form>
 
@@ -143,6 +225,27 @@ Atualizar Localização
                 </small>
 
             </div>
+
+
+            <!-- =====================================================
+                 RODAPÉ
+            ====================================================== -->
+
+            <div class="text-center mt-4">
+
+                <small class="text-muted">
+
+                    🌱 OriginTech Amazônia
+
+                    <br>
+
+                    A localização ajuda a comprovar a origem
+                    da produção de cacau.
+
+                </small>
+
+            </div>
+
 
         </div>
 
@@ -185,17 +288,24 @@ Atualizar Localização
         "click",
         function () {
 
-            // Verifica suporte do navegador
+
+            // ====================================================
+            // VERIFICAR SUPORTE DO NAVEGADOR
+            // ====================================================
+
             if (!navigator.geolocation) {
 
                 mensagem.textContent =
-                    "Seu dispositivo não permite obter a localização.";
+                    "⚠️ Seu dispositivo não permite obter a localização.";
 
                 return;
             }
 
 
-            // Estado inicial
+            // ====================================================
+            // ESTADO INICIAL
+            // ====================================================
+
             botao.disabled = true;
 
             botao.textContent =
@@ -213,6 +323,11 @@ Atualizar Localização
 
                 function (posicao) {
 
+
+                    // =================================================
+                    // COORDENADAS
+                    // =================================================
+
                     const latitude =
                         posicao.coords.latitude;
 
@@ -220,9 +335,9 @@ Atualizar Localização
                         posicao.coords.longitude;
 
 
-                    // --------------------------------------------
-                    // Preenche campos
-                    // --------------------------------------------
+                    // =================================================
+                    // PREENCHER CAMPOS
+                    // =================================================
 
                     campoLatitude.value =
                         latitude.toFixed(6);
@@ -231,17 +346,17 @@ Atualizar Localização
                         longitude.toFixed(6);
 
 
-                    // --------------------------------------------
-                    // Mensagem
-                    // --------------------------------------------
+                    // =================================================
+                    // MENSAGEM
+                    // =================================================
 
                     mensagem.textContent =
                         "✅ Localização encontrada. Salvando...";
 
 
-                    // --------------------------------------------
-                    // Envia automaticamente
-                    // --------------------------------------------
+                    // =================================================
+                    // ENVIAR FORMULÁRIO
+                    // =================================================
 
                     formulario.submit();
 
@@ -250,9 +365,18 @@ Atualizar Localização
 
                 function (erro) {
 
-                    let texto =
-                        "Não foi possível obter sua localização.";
 
+                    // =================================================
+                    // MENSAGEM PADRÃO
+                    // =================================================
+
+                    let texto =
+                        "⚠️ Não foi possível obter sua localização.";
+
+
+                    // =================================================
+                    // PERMISSÃO NEGADA
+                    // =================================================
 
                     if (erro.code === 1) {
 
@@ -261,12 +385,22 @@ Atualizar Localização
 
                     }
 
+
+                    // =================================================
+                    // POSIÇÃO INDISPONÍVEL
+                    // =================================================
+
                     else if (erro.code === 2) {
 
                         texto =
                             "⚠️ Não foi possível encontrar sua localização.";
 
                     }
+
+
+                    // =================================================
+                    // TIMEOUT
+                    // =================================================
 
                     else if (erro.code === 3) {
 
@@ -276,9 +410,17 @@ Atualizar Localização
                     }
 
 
+                    // =================================================
+                    // MOSTRAR ERRO
+                    // =================================================
+
                     mensagem.textContent =
                         texto;
 
+
+                    // =================================================
+                    // RESTAURAR BOTÃO
+                    // =================================================
 
                     botao.disabled = false;
 
@@ -286,6 +428,7 @@ Atualizar Localização
                         "📍 Usar minha localização";
 
                 },
+
 
                 {
                     enableHighAccuracy: true,
