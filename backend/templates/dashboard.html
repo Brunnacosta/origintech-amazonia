@@ -4,32 +4,159 @@
 Dashboard - OriginTech Amazônia
 {% endblock %}
 
+
 {% block content %}
 
 <div class="container py-4 py-md-5">
+
 
     <!-- =====================================================
          CABEÇALHO
     ====================================================== -->
 
-    <div class="text-center mb-5">
+    <div class="mb-4">
 
-        <h1 class="fw-bold">
-            Dashboard
-        </h1>
+        <div class="d-flex align-items-center gap-3">
 
-        <p class="lead">
-            Bem-vindo à OriginTech Amazônia 🌱
-        </p>
+            <div
+                style="font-size: 2.5rem;"
+                aria-hidden="true"
+            >
+                🌱
+            </div>
+
+            <div>
+
+                <h1 class="fw-bold mb-1">
+                    Olá, {{ current_user.nome }}!
+                </h1>
+
+                <p class="text-muted mb-0">
+                    Gerencie suas propriedades e seus lotes de cacau.
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
 
 
     <!-- =====================================================
-         OPÇÕES DO PRODUTOR
+         RESUMO
     ====================================================== -->
 
-    <div class="row g-4 justify-content-center">
+    {% set total_propriedades = current_user.propriedades|length %}
+
+    {% set total_lotes = namespace(valor=0) %}
+
+    {% for propriedade in current_user.propriedades %}
+        {% set total_lotes.valor = total_lotes.valor + (propriedade.lotes|length) %}
+    {% endfor %}
+
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- =================================================
+             PROPRIEDADES
+        ================================================== -->
+
+        <div class="col-12 col-md-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body p-4">
+
+                    <div class="text-muted small mb-1">
+                        🏡 Propriedades
+                    </div>
+
+                    <div class="fw-bold fs-2">
+                        {{ total_propriedades }}
+                    </div>
+
+                    <div class="text-muted small">
+                        cadastradas
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             LOTES
+        ================================================== -->
+
+        <div class="col-12 col-md-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body p-4">
+
+                    <div class="text-muted small mb-1">
+                        📦 Lotes
+                    </div>
+
+                    <div class="fw-bold fs-2">
+                        {{ total_lotes.valor }}
+                    </div>
+
+                    <div class="text-muted small">
+                        cadastrados
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             PERFIL
+        ================================================== -->
+
+        <div class="col-12 col-md-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body p-4">
+
+                    <div class="text-muted small mb-1">
+                        👨‍🌾 Perfil
+                    </div>
+
+                    <div class="fw-bold fs-5">
+                        {{ current_user.nome }}
+                    </div>
+
+                    <div class="text-muted small">
+                        {{ current_user.tipo|capitalize }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         AÇÕES PRINCIPAIS
+    ====================================================== -->
+
+    <h4 class="fw-bold mb-3">
+        Acesso rápido
+    </h4>
+
+
+    <div class="row g-4">
 
 
         <!-- =================================================
@@ -42,13 +169,20 @@ Dashboard - OriginTech Amazônia
 
                 <div class="card-body p-4">
 
+                    <div
+                        class="mb-3"
+                        style="font-size: 2rem;"
+                    >
+                        📦
+                    </div>
+
                     <h4 class="fw-bold">
-                        🌱 Meus Lotes
+                        Meus Lotes
                     </h4>
 
                     <p class="text-muted">
 
-                        Cadastre e acompanhe
+                        Cadastre, acompanhe e gerencie
                         seus lotes de cacau.
 
                     </p>
@@ -57,7 +191,7 @@ Dashboard - OriginTech Amazônia
                         href="{{ url_for('lotes.meus_lotes') }}"
                         class="btn btn-success"
                     >
-                        Acessar
+                        Ver meus lotes
                     </a>
 
                 </div>
@@ -68,7 +202,7 @@ Dashboard - OriginTech Amazônia
 
 
         <!-- =================================================
-             MINHA PROPRIEDADE
+             MINHAS PROPRIEDADES
         ================================================== -->
 
         <div class="col-12 col-md-6 col-lg-4">
@@ -77,14 +211,21 @@ Dashboard - OriginTech Amazônia
 
                 <div class="card-body p-4">
 
+                    <div
+                        class="mb-3"
+                        style="font-size: 2rem;"
+                    >
+                        🏡
+                    </div>
+
                     <h4 class="fw-bold">
-                        🏡 Minha Propriedade
+                        Minhas Propriedades
                     </h4>
 
                     <p class="text-muted">
 
-                        Consulte e atualize os dados
-                        da sua propriedade.
+                        Cadastre e gerencie as propriedades
+                        onde você produz seu cacau.
 
                     </p>
 
@@ -92,7 +233,91 @@ Dashboard - OriginTech Amazônia
                         href="{{ url_for('auth.minha_propriedade') }}"
                         class="btn btn-success"
                     >
-                        Acessar
+                        Ver propriedades
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             NOVO LOTE
+        ================================================== -->
+
+        <div class="col-12 col-md-6 col-lg-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body p-4">
+
+                    <div
+                        class="mb-3"
+                        style="font-size: 2rem;"
+                    >
+                        ➕
+                    </div>
+
+                    <h4 class="fw-bold">
+                        Novo Lote
+                    </h4>
+
+                    <p class="text-muted">
+
+                        Registre uma nova produção
+                        e vincule-a à propriedade correta.
+
+                    </p>
+
+                    <a
+                        href="{{ url_for('lotes.novo_lote') }}"
+                        class="btn btn-success"
+                    >
+                        Cadastrar lote
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             CONSULTAR LOTE
+        ================================================== -->
+
+        <div class="col-12 col-md-6 col-lg-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body p-4">
+
+                    <div
+                        class="mb-3"
+                        style="font-size: 2rem;"
+                    >
+                        🔎
+                    </div>
+
+                    <h4 class="fw-bold">
+                        Consultar Lote
+                    </h4>
+
+                    <p class="text-muted">
+
+                        Consulte publicamente um lote
+                        usando seu código de identificação.
+
+                    </p>
+
+                    <a
+                        href="{{ url_for('main.consultar_lote') }}"
+                        class="btn btn-outline-success"
+                    >
+                        Consultar
                     </a>
 
                 </div>
@@ -112,23 +337,27 @@ Dashboard - OriginTech Amazônia
 
                 <div class="card-body p-4">
 
+                    <div
+                        class="mb-3"
+                        style="font-size: 2rem;"
+                    >
+                        📊
+                    </div>
+
                     <h4 class="fw-bold">
-                        📊 Inteligência
+                        Inteligência
                     </h4>
 
                     <p class="text-muted">
 
-                        Consulte análises e informações
-                        da produção.
+                        Análises de produção, qualidade,
+                        mercado e desempenho.
 
                     </p>
 
-                    <button
-                        class="btn btn-success"
-                        type="button"
-                    >
-                        Acessar
-                    </button>
+                    <span class="badge bg-light text-dark border">
+                        Em breve
+                    </span>
 
                 </div>
 
@@ -147,23 +376,27 @@ Dashboard - OriginTech Amazônia
 
                 <div class="card-body p-4">
 
+                    <div
+                        class="mb-3"
+                        style="font-size: 2rem;"
+                    >
+                        🛒
+                    </div>
+
                     <h4 class="fw-bold">
-                        🛒 Marketplace
+                        Marketplace
                     </h4>
 
                     <p class="text-muted">
 
-                        Encontre compradores
-                        e oportunidades.
+                        Conecte sua produção a compradores
+                        e novas oportunidades de mercado.
 
                     </p>
 
-                    <button
-                        class="btn btn-success"
-                        type="button"
-                    >
-                        Acessar
-                    </button>
+                    <span class="badge bg-light text-dark border">
+                        Em breve
+                    </span>
 
                 </div>
 
@@ -171,6 +404,58 @@ Dashboard - OriginTech Amazônia
 
         </div>
 
+
+    </div>
+
+
+    <!-- =====================================================
+         MENSAGEM INSTITUCIONAL
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mt-4">
+
+        <div class="card-body p-4 p-md-5 text-center">
+
+            <div
+                class="mb-2"
+                style="font-size: 2rem;"
+            >
+                🌱
+            </div>
+
+            <h5 class="fw-bold">
+                Sua origem tem valor.
+            </h5>
+
+            <p class="text-muted mb-0">
+
+                A OriginTech Amazônia transforma os dados
+                da sua produção em identidade, rastreabilidade
+                e, futuramente, novas oportunidades de mercado.
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         RODAPÉ
+    ====================================================== -->
+
+    <div class="text-center mt-5">
+
+        <small class="text-muted">
+
+            🌱 OriginTech Amazônia
+
+            <br>
+
+            Tecnologia para origem, rastreabilidade
+            e valorização do cacau amazônico.
+
+        </small>
 
     </div>
 
