@@ -4,6 +4,7 @@
 Identidade Digital - {{ lote.codigo }}
 {% endblock %}
 
+
 {% block content %}
 
 
@@ -11,9 +12,9 @@ Identidade Digital - {{ lote.codigo }}
      LEAFLET - CSS DO MAPA
 ============================================================= -->
 
-{% if lote.produtor
-      and lote.produtor.latitude is not none
-      and lote.produtor.longitude is not none %}
+{% if lote.propriedade
+      and lote.propriedade.latitude is not none
+      and lote.propriedade.longitude is not none %}
 
 <link
     rel="stylesheet"
@@ -23,15 +24,15 @@ Identidade Digital - {{ lote.codigo }}
 {% endif %}
 
 
+<!-- =============================================================
+     CONTEÚDO PRINCIPAL
+============================================================= -->
+
 <div class="container py-4 py-md-5">
 
     <div class="row justify-content-center">
 
         <div class="col-12 col-lg-8">
-
-            <!-- =====================================================
-                 CARTÃO PRINCIPAL
-            ====================================================== -->
 
             <div class="card border-0 shadow-sm overflow-hidden">
 
@@ -66,274 +67,255 @@ Identidade Digital - {{ lote.codigo }}
 
 
                     <!-- =================================================
-                         IDENTIFICAÇÃO DO LOTE
+                         IDENTIDADE DO LOTE
                     ================================================== -->
 
                     <div class="text-center mb-4">
 
                         <p class="text-uppercase text-muted small fw-semibold mb-2">
-                            Origem do lote
+                            Identidade do lote
                         </p>
 
                         <h2 class="fw-bold mb-3">
-                            {{ lote.nome }}
+                            {{ lote.codigo }}
                         </h2>
 
                         <span class="badge bg-success px-3 py-2">
                             ✓ Lote verificado
                         </span>
 
-
-                        <!-- CÓDIGO DO LOTE -->
-
-                        <div class="mt-3">
-
-                            <span class="text-muted">
-                                Código do lote
-                            </span>
-
-                            <div class="fw-semibold fs-5">
-                                {{ lote.codigo }}
-                            </div>
-
-
-                            <!-- PRODUTOR -->
-
-                            {% if lote.produtor %}
-
-                                <div class="mt-3">
-
-                                    <span class="text-muted">
-                                        Produtor
-                                    </span>
-
-                                    <div class="fw-semibold fs-5">
-                                        👨‍🌾 {{ lote.produtor.nome }}
-                                    </div>
-
-                                </div>
-
-                            {% endif %}
-
-                        </div>
-
                     </div>
 
 
                     <!-- =================================================
-                         ORIGEM DO PRODUTOR
+                         ORIGEM
                     ================================================== -->
 
-                    {% if lote.produtor %}
+                    {% if lote.propriedade %}
 
-                        <div class="bg-light rounded-3 p-3 p-md-4 mb-4">
+                    <div class="bg-light rounded-3 p-3 p-md-4 mb-4">
 
-                            <h5 class="fw-bold mb-4">
-                                📍 Origem do produtor
-                            </h5>
-
-
-                            <!-- PROPRIEDADE -->
-
-                            {% if lote.produtor.propriedade %}
-
-                                <div class="mb-3">
-
-                                    <div class="text-muted small">
-                                        🏡 Propriedade
-                                    </div>
-
-                                    <div class="fw-semibold">
-                                        {{ lote.produtor.propriedade }}
-                                    </div>
-
-                                </div>
-
-                            {% endif %}
+                        <h5 class="fw-bold mb-4">
+                            🏡 Origem
+                        </h5>
 
 
-                            <!-- MUNICÍPIO -->
+                        <!-- =================================================
+                             PRODUTOR
+                        ================================================== -->
 
-                            {% if lote.produtor.municipio %}
+                        {% if lote.propriedade.produtor %}
 
-                                <div class="mb-3">
+                        <div class="mb-3">
 
-                                    <div class="text-muted small">
-                                        📍 Município
-                                    </div>
+                            <div class="text-muted small">
+                                👨‍🌾 Produtor
+                            </div>
 
-                                    <div class="fw-semibold">
-                                        {{ lote.produtor.municipio }}
-                                    </div>
-
-                                </div>
-
-                            {% endif %}
-
-
-                            <!-- VICINAL -->
-
-                            {% if lote.produtor.vicinal %}
-
-                                <div class="mb-3">
-
-                                    <div class="text-muted small">
-                                        🛣️ Vicinal
-                                    </div>
-
-                                    <div class="fw-semibold">
-                                        {{ lote.produtor.vicinal }}
-                                    </div>
-
-                                </div>
-
-                            {% endif %}
-
-
-                            <!-- =================================================
-                                 LOCALIZAÇÃO / COORDENADAS
-                            ================================================== -->
-
-                            {% if lote.produtor.latitude is not none
-                                  and lote.produtor.longitude is not none %}
-
-
-                                <div
-                                    id="dados-mapa"
-                                    data-latitude="{{ lote.produtor.latitude }}"
-                                    data-longitude="{{ lote.produtor.longitude }}"
-                                    data-propriedade="{{ lote.produtor.propriedade or '' }}"
-                                    data-municipio="{{ lote.produtor.municipio or '' }}"
-                                >
-
-
-                                    <div class="row g-3 mb-4">
-
-                                        <!-- LATITUDE -->
-
-                                        <div class="col-12 col-md-6">
-
-                                            <div class="border rounded-3 p-3 h-100">
-
-                                                <div class="text-muted small mb-1">
-                                                    🌎 Latitude
-                                                </div>
-
-                                                <div class="fw-semibold">
-                                                    {{ lote.produtor.latitude }}
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-
-                                        <!-- LONGITUDE -->
-
-                                        <div class="col-12 col-md-6">
-
-                                            <div class="border rounded-3 p-3 h-100">
-
-                                                <div class="text-muted small mb-1">
-                                                    🌎 Longitude
-                                                </div>
-
-                                                <div class="fw-semibold">
-                                                    {{ lote.produtor.longitude }}
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-
-                                    <!-- =================================================
-                                         MAPA
-                                    ================================================== -->
-
-                                    <div class="mt-4">
-
-                                        <h6 class="fw-bold mb-3">
-                                            🗺️ Localização da propriedade
-                                        </h6>
-
-
-                                        <div
-                                            id="mapa-origem"
-                                            style="
-                                                height: 320px;
-                                                width: 100%;
-                                                border-radius: 12px;
-                                                overflow: hidden;
-                                            "
-                                        ></div>
-
-
-                                        <p class="text-muted small mt-2 mb-0">
-                                            📍 Localização registrada da origem do lote.
-                                        </p>
-
-                                    </div>
-
-                                </div>
-
-                            {% endif %}
-
+                            <div class="fw-semibold">
+                                {{ lote.propriedade.produtor.nome }}
+                            </div>
 
                         </div>
+
+                        {% endif %}
+
+
+                        <!-- =================================================
+                             PROPRIEDADE
+                        ================================================== -->
+
+                        {% if lote.propriedade.nome %}
+
+                        <div class="mb-3">
+
+                            <div class="text-muted small">
+                                🏡 Propriedade
+                            </div>
+
+                            <div class="fw-semibold">
+                                {{ lote.propriedade.nome }}
+                            </div>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <!-- =================================================
+                             MUNICÍPIO
+                        ================================================== -->
+
+                        {% if lote.propriedade.municipio %}
+
+                        <div class="mb-3">
+
+                            <div class="text-muted small">
+                                📍 Município
+                            </div>
+
+                            <div class="fw-semibold">
+                                {{ lote.propriedade.municipio }}
+                            </div>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <!-- =================================================
+                             VICINAL
+                        ================================================== -->
+
+                        {% if lote.propriedade.vicinal %}
+
+                        <div>
+
+                            <div class="text-muted small">
+                                🛣️ Vicinal
+                            </div>
+
+                            <div class="fw-semibold">
+                                {{ lote.propriedade.vicinal }}
+                            </div>
+
+                        </div>
+
+                        {% endif %}
+
+
+                    </div>
 
                     {% endif %}
 
 
                     <!-- =================================================
-                         RESUMO DO LOTE
+                         LOCALIZAÇÃO
                     ================================================== -->
+
+                    {% if lote.propriedade
+                          and lote.propriedade.latitude is not none
+                          and lote.propriedade.longitude is not none %}
+
 
                     <div class="bg-light rounded-3 p-3 p-md-4 mb-4">
 
                         <h5 class="fw-bold mb-4">
-                            📦 Resumo do lote
+                            🌎 Origem geográfica
                         </h5>
 
-                        <div class="row g-4">
+
+                        <div
+                            id="dados-mapa"
+                            data-latitude="{{ lote.propriedade.latitude }}"
+                            data-longitude="{{ lote.propriedade.longitude }}"
+                            data-propriedade="{{ lote.propriedade.nome or '' }}"
+                            data-municipio="{{ lote.propriedade.municipio or '' }}"
+                        >
 
 
-                            <!-- QUANTIDADE -->
+                            <!-- =================================================
+                                 COORDENADAS
+                            ================================================== -->
 
-                            <div class="col-6">
+                            <div class="row g-3 mb-4">
 
-                                <div class="text-muted small">
-                                    Quantidade
+                                <div class="col-12 col-md-6">
+
+                                    <div class="border rounded-3 p-3 h-100">
+
+                                        <div class="text-muted small mb-1">
+                                            🌎 Latitude
+                                        </div>
+
+                                        <div class="fw-semibold">
+                                            {{ lote.propriedade.latitude }}
+                                        </div>
+
+                                    </div>
+
                                 </div>
 
-                                <div class="fw-bold fs-5">
-                                    {{ lote.quantidade_kg }} kg
+
+                                <div class="col-12 col-md-6">
+
+                                    <div class="border rounded-3 p-3 h-100">
+
+                                        <div class="text-muted small mb-1">
+                                            🌎 Longitude
+                                        </div>
+
+                                        <div class="fw-semibold">
+                                            {{ lote.propriedade.longitude }}
+                                        </div>
+
+                                    </div>
+
                                 </div>
 
                             </div>
 
 
-                            <!-- UMIDADE -->
+                            <!-- =================================================
+                                 MAPA
+                            ================================================== -->
 
-                            <div class="col-6">
+                            <div class="mt-3">
 
-                                <div class="text-muted small">
-                                    Umidade
-                                </div>
+                                <h6 class="fw-bold mb-3">
+                                    🗺️ Localização da propriedade
+                                </h6>
 
-                                <div class="fw-bold fs-5">
+                                <div
+                                    id="mapa-origem"
+                                    style="
+                                        height: 320px;
+                                        width: 100%;
+                                        border-radius: 12px;
+                                        overflow: hidden;
+                                    "
+                                ></div>
 
-                                    {% if lote.umidade is not none %}
+                                <p class="text-muted small mt-2 mb-0">
+                                    📍 Localização registrada da origem do lote.
+                                </p>
 
-                                        {{ lote.umidade }}%
+                            </div>
 
-                                    {% else %}
+                        </div>
 
-                                        Não informado
+                    </div>
 
-                                    {% endif %}
+                    {% endif %}
+
+
+                    <!-- =================================================
+                         PRODUÇÃO
+                    ================================================== -->
+
+                    <div class="bg-light rounded-3 p-3 p-md-4 mb-4">
+
+                        <h5 class="fw-bold mb-4">
+                            📦 Produção
+                        </h5>
+
+
+                        <div class="row g-3">
+
+
+                            <!-- QUANTIDADE -->
+
+                            <div class="col-12 col-md-6">
+
+                                <div class="border rounded-3 p-3 h-100">
+
+                                    <div class="text-muted small mb-1">
+                                        ⚖️ Quantidade
+                                    </div>
+
+                                    <div class="fw-bold fs-5">
+                                        {{ lote.quantidade_kg }} kg
+                                    </div>
 
                                 </div>
 
@@ -342,15 +324,17 @@ Identidade Digital - {{ lote.codigo }}
 
                             <!-- DATA -->
 
-                            <div class="col-12">
+                            <div class="col-12 col-md-6">
 
-                                <div class="text-muted small">
-                                    Data da colheita
-                                </div>
+                                <div class="border rounded-3 p-3 h-100">
 
-                                <div class="fw-semibold">
+                                    <div class="text-muted small mb-1">
+                                        📅 Data da colheita
+                                    </div>
 
-                                    {{ lote.data_colheita.strftime("%d/%m/%Y") }}
+                                    <div class="fw-bold fs-5">
+                                        {{ lote.data_colheita.strftime("%d/%m/%Y") }}
+                                    </div>
 
                                 </div>
 
@@ -363,13 +347,13 @@ Identidade Digital - {{ lote.codigo }}
 
 
                     <!-- =================================================
-                         INFORMAÇÕES DA PRODUÇÃO
+                         BENEFICIAMENTO
                     ================================================== -->
 
                     <div class="mb-4">
 
                         <h5 class="fw-bold mb-4">
-                            🌱 Informações da produção
+                            🌱 Beneficiamento
                         </h5>
 
 
@@ -412,6 +396,30 @@ Identidade Digital - {{ lote.codigo }}
                                 </div>
 
                             </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         INFORMAÇÕES DO LOTE
+                    ================================================== -->
+
+                    <div class="mb-4">
+
+                        <h5 class="fw-bold mb-3">
+                            📊 Informações do lote
+                        </h5>
+
+                        <p class="text-muted small mb-4">
+                            Dados registrados sobre as características
+                            e o sistema de produção deste lote.
+                        </p>
+
+
+                        <div class="row g-3">
 
 
                             <!-- UMIDADE -->
@@ -558,9 +566,9 @@ Identidade Digital - {{ lote.codigo }}
      LEAFLET - JAVASCRIPT
 ============================================================= -->
 
-{% if lote.produtor
-      and lote.produtor.latitude is not none
-      and lote.produtor.longitude is not none %}
+{% if lote.propriedade
+      and lote.propriedade.latitude is not none
+      and lote.propriedade.longitude is not none %}
 
 <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
@@ -577,7 +585,7 @@ Identidade Digital - {{ lote.codigo }}
 
 
     // ============================================================
-    // LEITURA DAS COORDENADAS
+    // COORDENADAS
     // ============================================================
 
     const latitude = Number(
@@ -604,7 +612,9 @@ Identidade Digital - {{ lote.codigo }}
     // CRIAÇÃO DO MAPA
     // ============================================================
 
-    const mapa = L.map("mapa-origem").setView(
+    const mapa = L.map(
+        "mapa-origem"
+    ).setView(
         [latitude, longitude],
         14
     );
@@ -635,7 +645,7 @@ Identidade Digital - {{ lote.codigo }}
 
 
     // ============================================================
-    // TEXTO DO MARCADOR
+    // POPUP
     // ============================================================
 
     let popupHtml = `
@@ -660,10 +670,6 @@ Identidade Digital - {{ lote.codigo }}
 
     }
 
-
-    // ============================================================
-    // POPUP
-    // ============================================================
 
     marcador
         .bindPopup(popupHtml)

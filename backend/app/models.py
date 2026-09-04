@@ -53,7 +53,10 @@ class Usuario(UserMixin, db.Model):
 
 
     # ========================================================
-    # DADOS DA PROPRIEDADE
+    # DADOS ANTIGOS DA PROPRIEDADE
+    #
+    # Mantidos temporariamente para podermos migrar os dados
+    # existentes para a nova tabela "propriedades".
     # ========================================================
 
     propriedade = db.Column(
@@ -73,7 +76,9 @@ class Usuario(UserMixin, db.Model):
 
 
     # ========================================================
-    # LOCALIZAÇÃO GEOGRÁFICA
+    # LOCALIZAÇÃO ANTIGA
+    #
+    # Também será migrada para a tabela "propriedades".
     # ========================================================
 
     latitude = db.Column(
@@ -84,6 +89,17 @@ class Usuario(UserMixin, db.Model):
     longitude = db.Column(
         db.Float,
         nullable=True
+    )
+
+
+    # ========================================================
+    # RELACIONAMENTO COM PROPRIEDADES
+    # ========================================================
+
+    propriedades = db.relationship(
+        "Propriedade",
+        back_populates="produtor",
+        cascade="all, delete-orphan"
     )
 
 
@@ -112,6 +128,100 @@ class Usuario(UserMixin, db.Model):
 
 
 # ============================================================
+# MODELO DE PROPRIEDADE / FAZENDA
+# ============================================================
+
+class Propriedade(db.Model):
+
+    __tablename__ = "propriedades"
+
+
+    # ========================================================
+    # IDENTIFICAÇÃO
+    # ========================================================
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    nome = db.Column(
+        db.String(150),
+        nullable=False
+    )
+
+
+    # ========================================================
+    # LOCALIZAÇÃO
+    # ========================================================
+
+    municipio = db.Column(
+        db.String(100),
+        nullable=True
+    )
+
+    vicinal = db.Column(
+        db.String(150),
+        nullable=True
+    )
+
+    latitude = db.Column(
+        db.Float,
+        nullable=True
+    )
+
+    longitude = db.Column(
+        db.Float,
+        nullable=True
+    )
+
+
+    # ========================================================
+    # RELACIONAMENTO COM O PRODUTOR
+    # ========================================================
+
+    produtor_id = db.Column(
+        db.Integer,
+        db.ForeignKey("usuarios.id"),
+        nullable=False
+    )
+
+    produtor = db.relationship(
+        "Usuario",
+        back_populates="propriedades"
+    )
+
+
+    # ========================================================
+    # RELACIONAMENTO COM LOTES
+    # ========================================================
+
+    lotes = db.relationship(
+        "Lote",
+        back_populates="propriedade"
+    )
+
+
+    # ========================================================
+    # CONTROLE
+    # ========================================================
+
+    criado_em = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+
+
+    # ========================================================
+    # REPRESENTAÇÃO
+    # ========================================================
+
+    def __repr__(self):
+
+        return f"<Propriedade {self.nome}>"
+
+
+# ============================================================
 # MODELO DE LOTE
 # ============================================================
 
@@ -132,11 +242,6 @@ class Lote(db.Model):
     codigo = db.Column(
         db.String(50),
         unique=True,
-        nullable=False
-    )
-
-    nome = db.Column(
-        db.String(150),
         nullable=False
     )
 
@@ -182,18 +287,18 @@ class Lote(db.Model):
 
 
     # ========================================================
-    # RELACIONAMENTO COM O PRODUTOR
+    # RELACIONAMENTO COM A PROPRIEDADE
     # ========================================================
 
-    produtor_id = db.Column(
+    propriedade_id = db.Column(
         db.Integer,
-        db.ForeignKey("usuarios.id"),
-        nullable=False
+        db.ForeignKey("propriedades.id"),
+        nullable=True
     )
 
-    produtor = db.relationship(
-        "Usuario",
-        backref="lotes"
+    propriedade = db.relationship(
+        "Propriedade",
+        back_populates="lotes"
     )
 
 

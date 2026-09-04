@@ -1,8 +1,15 @@
 {% extends "base.html" %}
 
 {% block title %}
-Editar Minha Propriedade
+
+    {% if nova_propriedade %}
+        Nova Propriedade - OriginTech Amazônia
+    {% else %}
+        Editar Propriedade - OriginTech Amazônia
+    {% endif %}
+
 {% endblock %}
+
 
 {% block content %}
 
@@ -11,6 +18,7 @@ Editar Minha Propriedade
     <div class="row justify-content-center">
 
         <div class="col-12 col-md-8 col-lg-6">
+
 
             <!-- =====================================================
                  CABEÇALHO
@@ -25,12 +33,26 @@ Editar Minha Propriedade
                     🏡
                 </div>
 
+
                 <h1 class="fw-bold">
-                    Editar minha propriedade
+
+                    {% if nova_propriedade %}
+                        Nova propriedade
+                    {% else %}
+                        Editar propriedade
+                    {% endif %}
+
                 </h1>
 
+
                 <p class="text-muted">
-                    Atualize os dados da sua propriedade.
+
+                    {% if nova_propriedade %}
+                        Cadastre uma nova propriedade onde você produz seu cacau.
+                    {% else %}
+                        Atualize os dados desta propriedade.
+                    {% endif %}
+
                 </p>
 
             </div>
@@ -44,13 +66,28 @@ Editar Minha Propriedade
 
                 <div class="card-body p-4 p-md-5">
 
+
                     <form
                         method="POST"
-                        action="{{ url_for('auth.editar_propriedade') }}"
+
+                        {% if nova_propriedade %}
+
+                            action="{{ url_for('auth.nova_propriedade') }}"
+
+                        {% else %}
+
+                            action="{{ url_for(
+                                'auth.editar_propriedade',
+                                propriedade_id=propriedade.id
+                            ) }}"
+
+                        {% endif %}
+
                     >
 
+
                         <!-- =================================================
-                             PROPRIEDADE
+                             NOME DA PROPRIEDADE
                         ================================================== -->
 
                         <div class="mb-4">
@@ -62,14 +99,21 @@ Editar Minha Propriedade
                                 🏡 Nome da propriedade
                             </label>
 
+
                             <input
                                 type="text"
                                 id="propriedade"
                                 name="propriedade"
                                 class="form-control"
-                                value="{{ usuario.propriedade or '' }}"
+                                value="{{ propriedade.nome or '' }}"
                                 placeholder="Ex.: Sítio Boa Esperança"
+                                required
                             >
+
+
+                            <div class="form-text">
+                                Informe o nome pelo qual a propriedade é conhecida.
+                            </div>
 
                         </div>
 
@@ -87,12 +131,13 @@ Editar Minha Propriedade
                                 📍 Município
                             </label>
 
+
                             <input
                                 type="text"
                                 id="municipio"
                                 name="municipio"
                                 class="form-control"
-                                value="{{ usuario.municipio or '' }}"
+                                value="{{ propriedade.municipio or '' }}"
                                 placeholder="Ex.: Uruará"
                             >
 
@@ -112,13 +157,14 @@ Editar Minha Propriedade
                                 🛣️ Vicinal
                             </label>
 
+
                             <input
                                 type="text"
                                 id="vicinal"
                                 name="vicinal"
                                 class="form-control"
-                                value="{{ usuario.vicinal or '' }}"
-                                placeholder="Ex.: 140 Norte"
+                                value="{{ propriedade.vicinal or '' }}"
+                                placeholder="Ex.: 140 Norte km 2"
                             >
 
                         </div>
@@ -131,31 +177,60 @@ Editar Minha Propriedade
                         <div class="border rounded-3 p-3 bg-light mb-4">
 
                             <div class="fw-semibold">
-                                📍 Localização
+                                📍 Localização da propriedade
                             </div>
 
-                            {% if usuario.latitude is not none
-                                  and usuario.longitude is not none %}
 
-                                <div class="text-success small mt-1">
+                            {% if propriedade.latitude is not none
+                                  and propriedade.longitude is not none %}
+
+                                <div class="text-success small mt-2">
+
                                     ✅ Localização cadastrada
+
+                                </div>
+
+
+                                <div class="text-muted small mt-1">
+
+                                    {{ propriedade.latitude }},
+                                    {{ propriedade.longitude }}
+
                                 </div>
 
                             {% else %}
 
-                                <div class="text-muted small mt-1">
-                                    Localização ainda não cadastrada.
+                                <div class="text-muted small mt-2">
+
+                                    ⚠️ Localização ainda não cadastrada.
+
                                 </div>
 
                             {% endif %}
 
 
-                            <a
-                                href="{{ url_for('auth.atualizar_localizacao') }}"
-                                class="btn btn-outline-success w-100 mt-3"
-                            >
-                                📍 Atualizar localização
-                            </a>
+                            {% if not nova_propriedade and propriedade.id %}
+
+                                <a
+                                    href="{{ url_for(
+                                        'auth.atualizar_localizacao',
+                                        propriedade_id=propriedade.id
+                                    ) }}"
+                                    class="btn btn-outline-success w-100 mt-3"
+                                >
+                                    📍 Atualizar localização
+                                </a>
+
+                            {% else %}
+
+                                <div class="text-muted small mt-3">
+
+                                    Salve a propriedade primeiro para
+                                    registrar sua localização.
+
+                                </div>
+
+                            {% endif %}
 
                         </div>
 
@@ -166,12 +241,28 @@ Editar Minha Propriedade
 
                         <div class="d-grid gap-2">
 
+
+                            <!-- SALVAR -->
+
                             <button
                                 type="submit"
                                 class="btn btn-success"
                             >
-                                💾 Salvar alterações
+
+                                {% if nova_propriedade %}
+
+                                    🏡 Cadastrar propriedade
+
+                                {% else %}
+
+                                    💾 Salvar alterações
+
+                                {% endif %}
+
                             </button>
+
+
+                            <!-- VOLTAR -->
 
                             <a
                                 href="{{ url_for('auth.minha_propriedade') }}"
@@ -181,6 +272,7 @@ Editar Minha Propriedade
                             </a>
 
                         </div>
+
 
                     </form>
 
@@ -201,7 +293,16 @@ Editar Minha Propriedade
 
                     <br>
 
-                    Mantenha os dados da sua propriedade atualizados.
+                    {% if nova_propriedade %}
+
+                        Cadastre suas propriedades para organizar
+                        seus lotes de cacau.
+
+                    {% else %}
+
+                        Mantenha os dados da propriedade atualizados.
+
+                    {% endif %}
 
                 </small>
 

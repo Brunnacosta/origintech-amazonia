@@ -1,262 +1,345 @@
 {% extends "base.html" %}
 
 {% block title %}
-Minha Propriedade
+Minhas Propriedades
 {% endblock %}
 
 {% block content %}
 
 <div class="container py-4 py-md-5">
 
-    <div class="row justify-content-center">
+    <!-- =====================================================
+         CABEÇALHO
+    ====================================================== -->
 
-        <div class="col-12 col-md-8 col-lg-6">
+    <div class="row align-items-center mb-4">
 
-            <!-- =====================================================
-                 CABEÇALHO
-            ====================================================== -->
+        <div class="col-12 col-md">
 
-            <div class="text-center mb-4">
+            <div class="d-flex align-items-center gap-3">
 
-                <div
-                    class="mb-2"
-                    style="font-size: 2.5rem;"
-                >
+                <div style="font-size: 2.5rem;">
                     🏡
                 </div>
 
-                <h1 class="fw-bold">
-                    Minha Propriedade
-                </h1>
-
-                <p class="text-muted">
-                    Confira as informações cadastradas.
-                </p>
-
-            </div>
-
-
-            <!-- =====================================================
-                 CARD DA PROPRIEDADE
-            ====================================================== -->
-
-            <div class="card border-0 shadow-sm">
-
-                <div class="card-body p-4 p-md-5">
-
-
-                    <!-- =================================================
-                         PRODUTOR
-                    ================================================== -->
-
-                    <div class="mb-4">
-
-                        <div class="text-muted small">
-                            👨‍🌾 Produtor
-                        </div>
-
-                        <div class="fw-semibold fs-5">
-                            {{ usuario.nome }}
-                        </div>
-
-                    </div>
-
-
-                    <!-- =================================================
-                         PROPRIEDADE
-                    ================================================== -->
-
-                    <div class="mb-4">
-
-                        <div class="text-muted small">
-                            🏡 Propriedade
-                        </div>
-
-                        <div class="fw-semibold">
-
-                            {% if usuario.propriedade %}
-
-                                {{ usuario.propriedade }}
-
-                            {% else %}
-
-                                Não informado
-
-                            {% endif %}
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- =================================================
-                         MUNICÍPIO
-                    ================================================== -->
-
-                    <div class="mb-4">
-
-                        <div class="text-muted small">
-                            📍 Município
-                        </div>
-
-                        <div class="fw-semibold">
-
-                            {% if usuario.municipio %}
-
-                                {{ usuario.municipio }}
-
-                            {% else %}
-
-                                Não informado
-
-                            {% endif %}
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- =================================================
-                         VICINAL
-                    ================================================== -->
-
-                    <div class="mb-4">
-
-                        <div class="text-muted small">
-                            🛣️ Vicinal
-                        </div>
-
-                        <div class="fw-semibold">
-
-                            {% if usuario.vicinal %}
-
-                                {{ usuario.vicinal }}
-
-                            {% else %}
-
-                                Não informado
-
-                            {% endif %}
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- =================================================
-                         STATUS DA LOCALIZAÇÃO
-                    ================================================== -->
-
-                    <div class="mb-4">
-
-                        <div class="text-muted small mb-2">
-                            📍 Localização
-                        </div>
-
-
-                        {% if usuario.latitude is not none
-                              and usuario.longitude is not none %}
-
-                            <div class="border rounded-3 p-3 bg-light">
-
-                                <div class="fw-semibold text-success">
-                                    ✅ Localização cadastrada
-                                </div>
-
-                                <div class="text-muted small mt-1">
-                                    Sua localização está registrada
-                                    para ajudar na identificação da origem
-                                    dos seus lotes.
-                                </div>
-
-                            </div>
-
-                        {% else %}
-
-                            <div class="border rounded-3 p-3 bg-light">
-
-                                <div class="fw-semibold">
-                                    ⚠️ Localização ainda não cadastrada
-                                </div>
-
-                                <div class="text-muted small mt-1">
-                                    Cadastre sua localização para melhorar
-                                    a rastreabilidade dos seus lotes.
-                                </div>
-
-                            </div>
-
-                        {% endif %}
-
-                    </div>
-
-
-                    <hr class="my-4">
-
-
-                    <!-- =================================================
-                         BOTÕES
-                    ================================================== -->
-
-                    <div class="d-grid gap-2">
-
-
-                        <!-- ATUALIZAR LOCALIZAÇÃO -->
-
-                        <a
-                            href="{{ url_for('auth.atualizar_localizacao') }}"
-                            class="btn btn-outline-success"
-                        >
-                            📍 Atualizar localização
-                        </a>
-
-
-                        <!-- EDITAR DADOS -->
-
-                        <a
-                            href="{{ url_for('auth.editar_propriedade') }}"
-                            class="btn btn-success"
-                        >
-                            ✏️ Editar informações
-                        </a>
-
-
-                        <!-- VOLTAR -->
-
-                        <a
-                            href="{{ url_for('auth.dashboard') }}"
-                            class="btn btn-outline-secondary"
-                        >
-                            ← Voltar ao Dashboard
-                        </a>
-
-                    </div>
+                <div>
+
+                    <h1 class="fw-bold mb-1">
+                        Minhas Propriedades
+                    </h1>
+
+                    <p class="text-muted mb-0">
+                        Gerencie as propriedades onde você produz seu cacau.
+                    </p>
 
                 </div>
-
-            </div>
-
-
-            <!-- =====================================================
-                 RODAPÉ
-            ====================================================== -->
-
-            <div class="text-center mt-4">
-
-                <small class="text-muted">
-
-                    🌱 OriginTech Amazônia
-
-                    <br>
-
-                    Seus dados ajudam a construir a identidade
-                    digital dos seus lotes.
-
-                </small>
 
             </div>
 
         </div>
+
+
+        <!-- =================================================
+             NOVA PROPRIEDADE
+        ================================================== -->
+
+        <div class="col-12 col-md-auto mt-3 mt-md-0">
+
+            <a
+                href="{{ url_for('auth.nova_propriedade') }}"
+                class="btn btn-success px-4"
+            >
+                + Adicionar propriedade
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         PRODUTOR
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body p-4">
+
+            <div class="text-muted small">
+                👨‍🌾 Produtor
+            </div>
+
+            <div class="fw-semibold fs-5">
+                {{ usuario.nome }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         LISTA DE PROPRIEDADES
+    ====================================================== -->
+
+    {% if propriedades %}
+
+        <div class="row g-4">
+
+            {% for propriedade in propriedades %}
+
+                <div class="col-12 col-md-6 col-lg-4">
+
+                    <div class="card h-100 border-0 shadow-sm">
+
+                        <div class="card-body p-4">
+
+
+                            <!-- =================================================
+                                 NOME
+                            ================================================== -->
+
+                            <div class="mb-4">
+
+                                <div class="text-muted small">
+                                    🏡 Propriedade
+                                </div>
+
+                                <div class="fw-bold fs-5">
+                                    {{ propriedade.nome }}
+                                </div>
+
+                            </div>
+
+
+                            <!-- =================================================
+                                 MUNICÍPIO
+                            ================================================== -->
+
+                            <div class="mb-3">
+
+                                <div class="text-muted small">
+                                    📍 Município
+                                </div>
+
+                                <div class="fw-semibold">
+
+                                    {% if propriedade.municipio %}
+                                        {{ propriedade.municipio }}
+                                    {% else %}
+                                        Não informado
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- =================================================
+                                 VICINAL
+                            ================================================== -->
+
+                            <div class="mb-3">
+
+                                <div class="text-muted small">
+                                    🛣️ Vicinal
+                                </div>
+
+                                <div class="fw-semibold">
+
+                                    {% if propriedade.vicinal %}
+                                        {{ propriedade.vicinal }}
+                                    {% else %}
+                                        Não informado
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- =================================================
+                                 LOCALIZAÇÃO
+                            ================================================== -->
+
+                            <div class="mb-4">
+
+                                <div class="text-muted small mb-2">
+                                    📍 Localização
+                                </div>
+
+
+                                {% if propriedade.latitude is not none
+                                      and propriedade.longitude is not none %}
+
+                                    <div class="border rounded-3 p-3 bg-light">
+
+                                        <div class="fw-semibold text-success">
+                                            ✅ Localização cadastrada
+                                        </div>
+
+                                        <div class="text-muted small mt-1">
+
+                                            {{ propriedade.latitude }},
+                                            {{ propriedade.longitude }}
+
+                                        </div>
+
+                                    </div>
+
+                                {% else %}
+
+                                    <div class="border rounded-3 p-3 bg-light">
+
+                                        <div class="fw-semibold">
+                                            ⚠️ Localização não cadastrada
+                                        </div>
+
+                                        <div class="text-muted small mt-1">
+                                            Registre a localização para melhorar
+                                            a rastreabilidade da propriedade.
+                                        </div>
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- =================================================
+                                 QUANTIDADE DE LOTES
+                            ================================================== -->
+
+                            <div class="mb-4">
+
+                                <div class="text-muted small">
+                                    📦 Lotes cadastrados
+                                </div>
+
+                                <div class="fw-bold fs-5">
+                                    {{ propriedade.lotes|length }}
+                                </div>
+
+                            </div>
+
+
+                            <hr>
+
+
+                            <!-- =================================================
+                                 AÇÕES
+                            ================================================== -->
+
+                            <div class="d-grid gap-2">
+
+
+                                <!-- EDITAR -->
+
+                                <a
+                                    href="{{ url_for(
+                                        'auth.editar_propriedade',
+                                        propriedade_id=propriedade.id
+                                    ) }}"
+                                    class="btn btn-success"
+                                >
+                                    ✏️ Editar propriedade
+                                </a>
+
+
+                                <!-- LOCALIZAÇÃO -->
+
+                                <a
+                                    href="{{ url_for(
+                                        'auth.atualizar_localizacao',
+                                        propriedade_id=propriedade.id
+                                    ) }}"
+                                    class="btn btn-outline-success"
+                                >
+                                    📍 Atualizar localização
+                                </a>
+
+
+                                <!-- CADASTRAR LOTE -->
+
+                                <a
+                                    href="{{ url_for(
+                                        'lotes.novo_lote'
+                                    ) }}"
+                                    class="btn btn-outline-secondary"
+                                >
+                                    📦 Cadastrar lote
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+    {% else %}
+
+
+        <!-- =====================================================
+             NENHUMA PROPRIEDADE
+        ====================================================== -->
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body text-center py-5">
+
+                <div
+                    class="mb-3"
+                    style="font-size: 3rem;"
+                >
+                    🏡
+                </div>
+
+                <h4 class="fw-bold">
+                    Nenhuma propriedade cadastrada
+                </h4>
+
+                <p class="text-muted mb-4">
+                    Cadastre sua primeira propriedade para começar
+                    a registrar seus lotes de cacau.
+                </p>
+
+                <a
+                    href="{{ url_for('auth.nova_propriedade') }}"
+                    class="btn btn-success px-4"
+                >
+                    + Cadastrar minha primeira propriedade
+                </a>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         RODAPÉ
+    ====================================================== -->
+
+    <div class="text-center mt-5">
+
+        <small class="text-muted">
+
+            🌱 OriginTech Amazônia
+
+            <br>
+
+            Uma propriedade pode possuir vários lotes.
+
+        </small>
 
     </div>
 

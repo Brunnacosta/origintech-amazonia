@@ -9,6 +9,7 @@ from flask import (
     url_for,
     flash,
     current_app,
+    request,
     send_file
 )
 
@@ -18,7 +19,12 @@ from flask_login import (
 )
 
 from app.extensions import db
-from app.models import Lote
+
+from app.models import (
+    Lote,
+    Propriedade
+)
+
 from app.lotes.forms import LoteForm
 
 
@@ -33,9 +39,15 @@ lotes = Blueprint("lotes", __name__)
 @login_required
 def meus_lotes():
 
-    lotes_usuario = Lote.query.filter_by(
-        produtor_id=current_user.id
-    ).all()
+    lotes_usuario = (
+        Lote.query
+        .join(Propriedade)
+        .filter(
+            Propriedade.produtor_id == current_user.id
+        )
+        .order_by(Lote.id.desc())
+        .all()
+    )
 
     return render_template(
         "meus_lotes.html",
@@ -56,34 +68,142 @@ def novo_lote():
 
     form = LoteForm()
 
+    # --------------------------------------------------------
+    # Buscar propriedades do produtor logado
+    # --------------------------------------------------------
+
+    propriedades = (
+        Propriedade.query
+        .filter_by(
+            produtor_id=current_user.id
+        )
+        .order_by(Propriedade.nome)
+        .all()
+    )
+
+    # --------------------------------------------------------
+    # Se o produtor ainda não possui propriedade
+    # --------------------------------------------------------
+
+    if not propriedades:
+
+        flash(
+            "Cadastre uma propriedade antes de registrar um lote.",
+            "warning"
+        )
+
+        return redirect(
+            url_for("auth.editar_propriedade")
+        )
+
+    # --------------------------------------------------------
+    # Cadastro do lote
+    # --------------------------------------------------------
+
     if form.validate_on_submit():
+
+        # ----------------------------------------------------
+        # A propriedade vem do formulário HTML
+        # ----------------------------------------------------
+
+        propriedade_id = request.form.get("propriedade_id")
+
+        if not propriedade_id:
+
+            flash(
+                "Selecione uma propriedade para o lote.",
+                "warning"
+            )
+
+            return render_template(
+                "lote_form.html",
+                form=form,
+                usuario=current_user,
+                propriedades=propriedades,
+                propriedade_selecionada=None
+            )
+
+        # ----------------------------------------------------
+        # Validar ID da propriedade
+        # ----------------------------------------------------
+
+        try:
+
+            propriedade_id = int(propriedade_id)
+
+        except (TypeError, ValueError):
+
+            flash(
+                "A propriedade selecionada é inválida.",
+                "danger"
+            )
+
+            return render_template(
+                "lote_form.html",
+                form=form,
+                usuario=current_user,
+                propriedades=propriedades,
+                propriedade_selecionada=None
+            )
+
+        # ----------------------------------------------------
+        # Garantir que a propriedade pertence ao usuário
+        # ----------------------------------------------------
+
+        propriedade = (
+            Propriedade.query
+            .filter_by(
+                id=propriedade_id,
+                produtor_id=current_user.id
+            )
+            .first()
+        )
+
+        if not propriedade:
+
+            flash(
+                "A propriedade selecionada não pertence ao seu cadastro.",
+                "danger"
+            )
+
+            return render_template(
+                "lote_form.html",
+                form=form,
+                usuario=current_user,
+                propriedades=propriedades,
+                propriedade_selecionada=None
+            )
+
+        # ----------------------------------------------------
+        # Criar o lote
+        # ----------------------------------------------------
 
         lote = Lote(
 
             # Identificação
             codigo=form.codigo.data,
 
-            # Campo antigo do banco.
-            # Por enquanto usamos o código como valor interno.
-            nome=form.codigo.data,
-
-            # Dados da colheita
+            # Colheita
             data_colheita=form.data_colheita.data,
+
             quantidade_kg=form.quantidade_kg.data,
 
             # Beneficiamento
             fermentacao=form.fermentacao.data,
+
             secagem=form.secagem.data,
 
-            # Qualidade
+            # Informações
             umidade=form.umidade.data,
+
             sistema_producao=form.sistema_producao.data,
 
-            # Produtor logado
-            produtor_id=current_user.id
+            # Relacionamento com a propriedade
+            propriedade_id=propriedade.id
         )
 
         db.session.add(lote)
+
         db.session.commit()
 
         flash(
@@ -95,10 +215,16 @@ def novo_lote():
             url_for("lotes.meus_lotes")
         )
 
+    # --------------------------------------------------------
+    # Exibir formulário
+    # --------------------------------------------------------
+
     return render_template(
         "lote_form.html",
         form=form,
-        usuario=current_user
+        usuario=current_user,
+        propriedades=propriedades,
+        propriedade_selecionada=None
     )
 
 
@@ -110,10 +236,15 @@ def novo_lote():
 @login_required
 def detalhes_lote(lote_id):
 
-    lote = Lote.query.filter_by(
-        id=lote_id,
-        produtor_id=current_user.id
-    ).first_or_404()
+    lote = (
+        Lote.query
+        .join(Propriedade)
+        .filter(
+            Lote.id == lote_id,
+            Propriedade.produtor_id == current_user.id
+        )
+        .first_or_404()
+    )
 
     return render_template(
         "detalhes_lote.html",
@@ -132,20 +263,117 @@ def detalhes_lote(lote_id):
 @login_required
 def editar_lote(lote_id):
 
-    lote = Lote.query.filter_by(
-        id=lote_id,
-        produtor_id=current_user.id
-    ).first_or_404()
+    # --------------------------------------------------------
+    # Buscar lote garantindo que pertence ao usuário
+    # --------------------------------------------------------
+
+    lote = (
+        Lote.query
+        .join(Propriedade)
+        .filter(
+            Lote.id == lote_id,
+            Propriedade.produtor_id == current_user.id
+        )
+        .first_or_404()
+    )
 
     form = LoteForm(obj=lote)
 
+    # --------------------------------------------------------
+    # Buscar propriedades do produtor
+    # --------------------------------------------------------
+
+    propriedades = (
+        Propriedade.query
+        .filter_by(
+            produtor_id=current_user.id
+        )
+        .order_by(Propriedade.nome)
+        .all()
+    )
+
+    # --------------------------------------------------------
+    # Atualizar lote
+    # --------------------------------------------------------
+
     if form.validate_on_submit():
 
-        lote.codigo = form.codigo.data
+        propriedade_id = request.form.get("propriedade_id")
 
-        # Mantém o campo técnico antigo sincronizado
-        # com o código do lote.
-        lote.nome = form.codigo.data
+        if not propriedade_id:
+
+            flash(
+                "Selecione uma propriedade para o lote.",
+                "warning"
+            )
+
+            return render_template(
+                "lote_form.html",
+                form=form,
+                usuario=current_user,
+                propriedades=propriedades,
+                lote=lote,
+                propriedade_selecionada=lote.propriedade_id
+            )
+
+        # ----------------------------------------------------
+        # Validar ID
+        # ----------------------------------------------------
+
+        try:
+
+            propriedade_id = int(propriedade_id)
+
+        except (TypeError, ValueError):
+
+            flash(
+                "A propriedade selecionada é inválida.",
+                "danger"
+            )
+
+            return render_template(
+                "lote_form.html",
+                form=form,
+                usuario=current_user,
+                propriedades=propriedades,
+                lote=lote,
+                propriedade_selecionada=lote.propriedade_id
+            )
+
+        # ----------------------------------------------------
+        # Garantir que a propriedade pertence ao usuário
+        # ----------------------------------------------------
+
+        propriedade = (
+            Propriedade.query
+            .filter_by(
+                id=propriedade_id,
+                produtor_id=current_user.id
+            )
+            .first()
+        )
+
+        if not propriedade:
+
+            flash(
+                "A propriedade selecionada não pertence ao seu cadastro.",
+                "danger"
+            )
+
+            return render_template(
+                "lote_form.html",
+                form=form,
+                usuario=current_user,
+                propriedades=propriedades,
+                lote=lote,
+                propriedade_selecionada=lote.propriedade_id
+            )
+
+        # ----------------------------------------------------
+        # Atualizar os dados
+        # ----------------------------------------------------
+
+        lote.codigo = form.codigo.data
 
         lote.data_colheita = form.data_colheita.data
 
@@ -158,6 +386,12 @@ def editar_lote(lote_id):
         lote.umidade = form.umidade.data
 
         lote.sistema_producao = form.sistema_producao.data
+
+        # ----------------------------------------------------
+        # Atualizar propriedade
+        # ----------------------------------------------------
+
+        lote.propriedade_id = propriedade.id
 
         db.session.commit()
 
@@ -173,10 +407,17 @@ def editar_lote(lote_id):
             )
         )
 
+    # --------------------------------------------------------
+    # Exibir formulário
+    # --------------------------------------------------------
+
     return render_template(
         "lote_form.html",
         form=form,
-        usuario=current_user
+        usuario=current_user,
+        propriedades=propriedades,
+        lote=lote,
+        propriedade_selecionada=lote.propriedade_id
     )
 
 
@@ -191,10 +432,15 @@ def editar_lote(lote_id):
 @login_required
 def excluir_lote(lote_id):
 
-    lote = Lote.query.filter_by(
-        id=lote_id,
-        produtor_id=current_user.id
-    ).first_or_404()
+    lote = (
+        Lote.query
+        .join(Propriedade)
+        .filter(
+            Lote.id == lote_id,
+            Propriedade.produtor_id == current_user.id
+        )
+        .first_or_404()
+    )
 
     db.session.delete(lote)
 
@@ -220,10 +466,15 @@ def excluir_lote(lote_id):
 @login_required
 def qrcode_lote(lote_id):
 
-    lote = Lote.query.filter_by(
-        id=lote_id,
-        produtor_id=current_user.id
-    ).first_or_404()
+    lote = (
+        Lote.query
+        .join(Propriedade)
+        .filter(
+            Lote.id == lote_id,
+            Propriedade.produtor_id == current_user.id
+        )
+        .first_or_404()
+    )
 
     return render_template(
         "qrcode.html",
@@ -241,10 +492,15 @@ def qrcode_lote(lote_id):
 @login_required
 def imagem_qrcode(lote_id):
 
-    lote = Lote.query.filter_by(
-        id=lote_id,
-        produtor_id=current_user.id
-    ).first_or_404()
+    lote = (
+        Lote.query
+        .join(Propriedade)
+        .filter(
+            Lote.id == lote_id,
+            Propriedade.produtor_id == current_user.id
+        )
+        .first_or_404()
+    )
 
     url_publica = (
         f"{current_app.config['BASE_URL']}"
@@ -278,10 +534,15 @@ def imagem_qrcode(lote_id):
 @login_required
 def baixar_qrcode(lote_id):
 
-    lote = Lote.query.filter_by(
-        id=lote_id,
-        produtor_id=current_user.id
-    ).first_or_404()
+    lote = (
+        Lote.query
+        .join(Propriedade)
+        .filter(
+            Lote.id == lote_id,
+            Propriedade.produtor_id == current_user.id
+        )
+        .first_or_404()
+    )
 
     url_publica = (
         f"{current_app.config['BASE_URL']}"
@@ -314,9 +575,13 @@ def baixar_qrcode(lote_id):
 @lotes.route("/lote/<codigo>")
 def lote_publico(codigo):
 
-    lote = Lote.query.filter_by(
-        codigo=codigo
-    ).first()
+    lote = (
+        Lote.query
+        .filter_by(
+            codigo=codigo
+        )
+        .first()
+    )
 
     if not lote:
 

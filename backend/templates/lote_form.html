@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 
 {% block title %}
-Cadastrar Lote - OriginTech Amazônia
+    {% if lote is defined %}
+        Editar Lote - OriginTech Amazônia
+    {% else %}
+        Cadastrar Lote - OriginTech Amazônia
+    {% endif %}
 {% endblock %}
 
 
@@ -25,15 +29,31 @@ Cadastrar Lote - OriginTech Amazônia
                     <div class="mb-4">
 
                         <h2 class="fw-bold mb-2">
-                            🌱 Cadastrar Lote
+
+                            {% if lote is defined %}
+                                ✏️ Editar Lote
+                            {% else %}
+                                🌱 Cadastrar Lote
+                            {% endif %}
+
                         </h2>
 
                         <p class="text-muted mb-0">
-                            Registre as informações do seu lote de cacau.
+
+                            {% if lote is defined %}
+                                Atualize as informações do seu lote de cacau.
+                            {% else %}
+                                Registre as informações do seu lote de cacau.
+                            {% endif %}
+
                         </p>
 
                     </div>
 
+
+                    <!-- ====================================================
+                         FORMULÁRIO
+                    ===================================================== -->
 
                     <form method="POST">
 
@@ -52,7 +72,9 @@ Cadastrar Lote - OriginTech Amazônia
                         <div class="row">
 
 
-                            <!-- CÓDIGO -->
+                            <!-- =================================================
+                                 CÓDIGO
+                            ================================================== -->
 
                             <div class="col-12 col-md-6 mb-3">
 
@@ -62,7 +84,7 @@ Cadastrar Lote - OriginTech Amazônia
 
                                 {{ form.codigo(
                                     class="form-control",
-                                    placeholder="Ex.: LOTE-2026-003"
+                                    placeholder="Ex.: LOTE-2026-004"
                                 ) }}
 
                                 <div class="form-text">
@@ -80,50 +102,65 @@ Cadastrar Lote - OriginTech Amazônia
                             </div>
 
 
-                            <!-- PROPRIEDADE -->
+                            <!-- =================================================
+                                 PROPRIEDADE
+                            ================================================== -->
 
                             <div class="col-12 col-md-6 mb-3">
 
-                                <label class="form-label">
+                                <label
+                                    for="propriedade_id"
+                                    class="form-label"
+                                >
                                     🏡 Propriedade
                                 </label>
 
 
-                                {% if current_user.propriedade %}
+                                {% if propriedades %}
 
-                                    <input
-                                        type="text"
-                                        class="form-control bg-light"
-                                        value="{{ current_user.propriedade }}"
-                                        readonly
+                                    <select
+                                        name="propriedade_id"
+                                        id="propriedade_id"
+                                        class="form-select"
+                                        required
                                     >
 
+                                        <option value="">
+                                            Selecione a propriedade
+                                        </option>
+
+
+                                        {% for propriedade in propriedades %}
+
+                                            <option
+                                                value="{{ propriedade.id }}"
+                                                {% if propriedade_selecionada is defined and propriedade_selecionada == propriedade.id %}
+                                                    selected
+                                                {% endif %}
+                                            >
+                                                {{ propriedade.nome }}
+                                            </option>
+
+                                        {% endfor %}
+
+                                    </select>
+
+
                                     <div class="form-text">
-                                        A propriedade vem automaticamente do seu cadastro.
+                                        Escolha de qual propriedade este lote veio.
                                     </div>
 
-
-                                    <div class="mt-2">
-
-                                        <a
-                                            href="{{ url_for('auth.minha_propriedade') }}"
-                                            class="small text-success text-decoration-none"
-                                        >
-                                            ✏️ Alterar propriedade
-                                        </a>
-
-                                    </div>
 
                                 {% else %}
 
                                     <div class="alert alert-warning mb-0">
 
                                         <div class="fw-bold mb-1">
-                                            ⚠️ Propriedade ainda não cadastrada
+                                            ⚠️ Nenhuma propriedade cadastrada
                                         </div>
 
                                         <div class="small mb-3">
-                                            Cadastre sua propriedade antes
+                                            Cadastre uma propriedade antes
                                             de registrar um lote.
                                         </div>
 
@@ -155,7 +192,9 @@ Cadastrar Lote - OriginTech Amazônia
                         <div class="row">
 
 
-                            <!-- DATA -->
+                            <!-- =================================================
+                                 DATA
+                            ================================================== -->
 
                             <div class="col-12 col-md-6 mb-3">
 
@@ -178,7 +217,9 @@ Cadastrar Lote - OriginTech Amazônia
                             </div>
 
 
-                            <!-- QUANTIDADE -->
+                            <!-- =================================================
+                                 QUANTIDADE
+                            ================================================== -->
 
                             <div class="col-12 col-md-6 mb-3">
 
@@ -216,7 +257,9 @@ Cadastrar Lote - OriginTech Amazônia
                         <div class="row">
 
 
-                            <!-- FERMENTAÇÃO -->
+                            <!-- =================================================
+                                 FERMENTAÇÃO
+                            ================================================== -->
 
                             <div class="col-12 col-md-6 mb-3">
 
@@ -244,7 +287,9 @@ Cadastrar Lote - OriginTech Amazônia
                             </div>
 
 
-                            <!-- SECAGEM -->
+                            <!-- =================================================
+                                 SECAGEM
+                            ================================================== -->
 
                             <div class="col-12 col-md-6 mb-3">
 
@@ -277,6 +322,7 @@ Cadastrar Lote - OriginTech Amazônia
                             📊 Informações do lote
                         </h5>
 
+
                         <p class="text-muted small mb-3">
                             Algumas informações são opcionais e podem ser
                             preenchidas somente quando você tiver esses dados.
@@ -286,7 +332,9 @@ Cadastrar Lote - OriginTech Amazônia
                         <div class="row">
 
 
-                            <!-- UMIDADE -->
+                            <!-- =================================================
+                                 UMIDADE
+                            ================================================== -->
 
                             <div class="col-12 col-md-6 mb-3">
 
@@ -314,7 +362,9 @@ Cadastrar Lote - OriginTech Amazônia
                             </div>
 
 
-                            <!-- SISTEMA DE PRODUÇÃO -->
+                            <!-- =================================================
+                                 SISTEMA DE PRODUÇÃO
+                            ================================================== -->
 
                             <div class="col-12 col-md-6 mb-3">
 
@@ -345,9 +395,27 @@ Cadastrar Lote - OriginTech Amazônia
 
                         <div class="d-grid d-md-flex gap-2 mt-4">
 
-                            {{ form.submit(
-                                class="btn btn-success btn-lg"
-                            ) }}
+
+                            <!-- BOTÃO PRINCIPAL -->
+
+                            {% if lote is defined %}
+
+                                {{ form.submit(
+                                    value="Atualizar lote",
+                                    class="btn btn-success btn-lg"
+                                ) }}
+
+                            {% else %}
+
+                                {{ form.submit(
+                                    value="Cadastrar lote",
+                                    class="btn btn-success btn-lg"
+                                ) }}
+
+                            {% endif %}
+
+
+                            <!-- CANCELAR -->
 
                             <a
                                 href="{{ url_for('lotes.meus_lotes') }}"
@@ -357,6 +425,7 @@ Cadastrar Lote - OriginTech Amazônia
                             </a>
 
                         </div>
+
 
                     </form>
 

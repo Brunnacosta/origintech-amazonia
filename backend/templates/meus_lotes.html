@@ -4,9 +4,11 @@
 Meus Lotes - OriginTech Amazônia
 {% endblock %}
 
+
 {% block content %}
 
 <div class="container py-4 py-md-5">
+
 
     <!-- =====================================================
          CABEÇALHO
@@ -58,7 +60,9 @@ Meus Lotes - OriginTech Amazônia
                         <div class="card-body p-4">
 
 
-                            <!-- CÓDIGO -->
+                            <!-- =================================================
+                                 IDENTIFICAÇÃO
+                            ================================================== -->
 
                             <div class="d-flex justify-content-between align-items-start mb-3">
 
@@ -82,16 +86,66 @@ Meus Lotes - OriginTech Amazônia
                             </div>
 
 
-                            <!-- NOME -->
+                            <!-- =================================================
+                                 PROPRIEDADE
+                            ================================================== -->
 
-                            <h5 class="fw-bold mb-3">
-                                {{ lote.nome }}
-                            </h5>
+                            <div class="mb-3">
+
+                                <div class="text-muted small">
+                                    🏡 Propriedade
+                                </div>
+
+                                {% if lote.propriedade %}
+
+                                    <div class="fw-semibold">
+                                        {{ lote.propriedade.nome }}
+                                    </div>
+
+                                {% else %}
+
+                                    <div class="text-warning fw-semibold">
+                                        Não vinculada
+                                    </div>
+
+                                    <div class="text-muted small mt-1">
+                                        Este lote ainda não possui uma propriedade vinculada.
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
 
 
-                            <!-- INFORMAÇÕES -->
+                            <!-- =================================================
+                                 MUNICÍPIO
+                            ================================================== -->
+
+                            {% if lote.propriedade and lote.propriedade.municipio %}
+
+                                <div class="mb-3">
+
+                                    <div class="text-muted small">
+                                        📍 Município
+                                    </div>
+
+                                    <div class="fw-semibold">
+                                        {{ lote.propriedade.municipio }}
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <!-- =================================================
+                                 INFORMAÇÕES
+                            ================================================== -->
 
                             <div class="row g-3 mb-4">
+
+
+                                <!-- COLHEITA -->
 
                                 <div class="col-6">
 
@@ -108,6 +162,8 @@ Meus Lotes - OriginTech Amazônia
                                 </div>
 
 
+                                <!-- QUANTIDADE -->
+
                                 <div class="col-6">
 
                                     <div class="text-muted small">
@@ -120,6 +176,8 @@ Meus Lotes - OriginTech Amazônia
 
                                 </div>
 
+
+                                <!-- UMIDADE -->
 
                                 <div class="col-6">
 
@@ -135,7 +193,7 @@ Meus Lotes - OriginTech Amazônia
 
                                         {% else %}
 
-                                            —
+                                            Não informado
 
                                         {% endif %}
 
@@ -143,6 +201,8 @@ Meus Lotes - OriginTech Amazônia
 
                                 </div>
 
+
+                                <!-- PRODUÇÃO -->
 
                                 <div class="col-6">
 
@@ -158,7 +218,7 @@ Meus Lotes - OriginTech Amazônia
 
                                         {% else %}
 
-                                            —
+                                            Não informado
 
                                         {% endif %}
 
@@ -172,9 +232,14 @@ Meus Lotes - OriginTech Amazônia
                             <hr>
 
 
-                            <!-- AÇÕES -->
+                            <!-- =================================================
+                                 AÇÕES
+                            ================================================== -->
 
                             <div class="d-grid gap-2">
+
+
+                                <!-- VER DETALHES -->
 
                                 <a
                                     href="{{ url_for(
@@ -188,6 +253,9 @@ Meus Lotes - OriginTech Amazônia
 
 
                                 <div class="row g-2">
+
+
+                                    <!-- QR CODE -->
 
                                     <div class="col-6">
 
@@ -203,6 +271,8 @@ Meus Lotes - OriginTech Amazônia
 
                                     </div>
 
+
+                                    <!-- EDITAR -->
 
                                     <div class="col-6">
 
@@ -234,6 +304,7 @@ Meus Lotes - OriginTech Amazônia
 
 
     {% else %}
+
 
         <!-- =====================================================
              NENHUM LOTE
